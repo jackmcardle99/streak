@@ -9,8 +9,20 @@ public class House {
     }
 
     private static void menu(){
-        System.out.println("Please choose from the options available");
-        System.out.println("♠");
+//        System.out.println("Please choose from the options available");
+//        System.out.println("♠");
+        Card[] myCards = new Card[52];
+        int index = 0; //this method is working, it is creating 13 of each suit and putting it into an array
+        for (int suit = 0; suit <= 3; suit++) {
+            for (int rank = 0; rank < 13; rank++) {
+                myCards[index] = new Card(rank, suit);
+                index++;
+            }
+        }
+
+        for (Card myCard : myCards) {
+            System.out.println(myCard.toString());
+        }
     }
 
 }
