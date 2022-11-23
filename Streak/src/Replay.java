@@ -1,4 +1,22 @@
 public class Replay<T> implements StackInterface<T>{
+    @Override
+    public T deal() {
+        return null;
+    }
+
+    @Override
+    public void stash(T newCard) {
+    }
+
+    @Override
+    public T peek() {
+        return null;
+    }
+
+    @Override
+    public void shuffle() {
+
+    }
 
     /*
     this class will be responsible for storing the played cards from single player game. When card is popped from

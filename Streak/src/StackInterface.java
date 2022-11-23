@@ -1,5 +1,4 @@
 public interface StackInterface<T> {
-    static int numberOfCards = 0;
     /*
     this interface should contain behaviours for manipulating the stack
     - pop (deal)
@@ -8,4 +7,17 @@ public interface StackInterface<T> {
     - count cards
     look into other needed methods
      */
+
+    public T deal();
+    /*
+    this method is the equivalent
+     */
+
+    public void stash(T newCard);
+
+    public T peek();
+
+    public void shuffle();
+
+
 }
