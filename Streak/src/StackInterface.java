@@ -19,5 +19,7 @@ public interface StackInterface<T> {
 
     public void shuffle();
 
+    public void display();
+
 
 }

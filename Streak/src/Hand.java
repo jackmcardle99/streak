@@ -1,3 +1,5 @@
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.EmptyStackException;
 
 public class Hand<T> implements StackInterface<T>{
@@ -32,6 +34,15 @@ public class Hand<T> implements StackInterface<T>{
     @Override
     public void shuffle() {
 
+    }
+
+    //@Override
+    public void display() {
+        MyNode<T> current = topNode;
+        while(current != null){
+            System.out.println(current.getData());
+            current = current.getNext();
+        }
     }
 
     public int getCapacity(){

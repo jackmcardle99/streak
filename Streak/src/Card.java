@@ -3,7 +3,7 @@ public class Card {
     private  int RANK, SUIT;
     private String rank,suit, colour;
 
-    private final String[] SUITS = {"Spades", "Clubs", "Diamonds", "Hearts"};
+    private final String[] SUITS = {"Spades ♠️", "Hearts ♥️", "Clubs ♣️", "Diamonds ♦️"};
     private final String[] RANKS = {"2","3","4","5","6","7","8","9","10","Jack","Queen","King","Ace"};
 
     public Card(int rank, int suit){

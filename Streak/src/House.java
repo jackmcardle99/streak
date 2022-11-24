@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class House {
@@ -17,12 +18,15 @@ public class House {
                 (3) Scores
                 (4) Exit""");
         String userInput = scan.nextLine();
-        switch (userInput){
-            case "1":
-                fillDeck();
-                onePlayer();
+        switch (userInput) {
+            case "1" -> onePlayer();
+            case "2" -> twoPlayer();
+            case "3" -> scoreboard();
+            case "4" -> {
+                System.out.println("Thanks for playing!");
+                System.exit(1);
+            }
         }
-//        System.out.println("♠");
     }
 
     private static void fillDeck(){
@@ -35,18 +39,28 @@ public class House {
     }
 
     public static void onePlayer(){
+        fillDeck();
+        deck.shuffle();
         fillHand(chooseHandSize());
-
+        hand.display();
+        System.out.println(deck.getCapacity());
     }
 
     public static void twoPlayer(){};
+
+    public static void scoreboard(){}
 
     private static int chooseHandSize(){
         //TRY CATCH IN HERE
         //VALIDATION TO ENSURE HAND IS 5-10
         Scanner scan = new Scanner(System.in);
-        System.out.println("Please choose the size of your hand. (Between 5-10 cards)");
-        return scan.nextInt();
+        try {
+            System.out.println("Please choose the size of your hand. (Between 5-10 cards)");
+            return scan.nextInt();
+        }catch (InputMismatchException ex){
+            System.out.println("Please enter valid input");
+        }
+        return 0;
     }
     private static void fillHand(int handSize){
         for(int i = 0; i < handSize; i++){
