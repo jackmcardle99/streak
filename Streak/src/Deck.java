@@ -5,10 +5,7 @@ import java.util.random.*;
 public class Deck<T> implements StackInterface<T>{
     static int numberOfCards = 0;
     int MAX_CAPACITY = 52; //max cards allowed in deck
-    //Card[] deck; // array for deck, each element is card object
     MyNode<T> topNode;
-
-
 
     public Deck(){topNode=null;}
     public T deal() { //stack.pop
@@ -41,9 +38,9 @@ public class Deck<T> implements StackInterface<T>{
         Random ran = new Random();
         for(int i = tempArray.length-1; i >= 1; i--){ // loop from n-1 to 1
             int j = ran.nextInt(i+1);
-//            Card temp = tempArray[i];
+            Card temp = tempArray[i]; //card object created to remember card at [i] for later swapping
             tempArray[i] = tempArray[j]; //swap element [i] with element [j](random number)
-            tempArray[j] = tempArray[i];
+            tempArray[j] = temp;
         }
         for (Card card : tempArray) { //after shuffle, push cards onto deck
             stash((T) card);
@@ -60,6 +57,9 @@ public class Deck<T> implements StackInterface<T>{
     }
 
 
+    private T[] toArray(Deck<T> deckToArray){
+        return null;
+    }
     public void clear(){
         topNode = null;
     }

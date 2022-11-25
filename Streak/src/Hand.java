@@ -36,6 +36,17 @@ public class Hand<T> implements StackInterface<T>{
 
     }
 
+    public void quickSort(int arrSize){ //IMPLEMENTING QUICKSORT
+        Card[] tempArr = new Card[arrSize];
+        for(int i = 0; i < arrSize; i++){
+            tempArr[i] = (Card) deal();
+        }
+        Card pivot = tempArr[arrSize-1];
+        int indexFromLeft = 0, indexFromRight = arrSize-1;
+
+
+    }
+
     //@Override
     public void display() {
         MyNode<T> current = topNode;

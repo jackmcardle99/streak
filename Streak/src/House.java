@@ -40,10 +40,30 @@ public class House {
 
     public static void onePlayer(){
         fillDeck();
+        //System.out.println("-----------------------------UNSHUFFLED---------------------");
+//        for(int i = 0; i < deck.MAX_CAPACITY; i++){
+//            System.out.println(deck.deal());
+//        }
+
+       // deck.clear();
+        //fillDeck();
+       // deck.shuffle();
+        //System.out.prijntln("-----------------------------SHUFFLED---------------------");
         deck.shuffle();
+//        Card card1 = deck.deal();
+//        Card card2 = deck.deal();
+//        System.out.println("Card 1 is " + card1 + " rank order is " + card1.getRankValue());
+//        System.out.println("Card 2 is " + card1 + " rank order is " + card1.getRankValue());
+//        System.out.println(card1.compareTo(card2));
+//        for(int i = 0; i < deck.MAX_CAPACITY; i++){
+//            System.out.println(deck.deal());
+//        }
+
         fillHand(chooseHandSize());
         hand.display();
-        System.out.println(deck.getCapacity());
+        System.out.println(hand.getCapacity());
+        hand.quickSort(hand.getCapacity());
+       // System.out.println(deck.getCapacity());
     }
 
     public static void twoPlayer(){};
@@ -67,6 +87,8 @@ public class House {
             hand.stash(deck.deal());
         }
     }
+
+
 
 
 
