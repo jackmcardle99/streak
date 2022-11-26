@@ -2,7 +2,7 @@ import java.util.EmptyStackException;
 import java.util.Random;
 import java.util.random.*;
 
-public class Deck<T> implements StackInterface<T>{
+public class Deck<T> implements DeckInterface<T>{
     static int numberOfCards = 0;
     int MAX_CAPACITY = 52; //max cards allowed in deck
     MyNode<T> topNode;
@@ -31,8 +31,8 @@ public class Deck<T> implements StackInterface<T>{
 
     @Override
     public void shuffle() {  // Fisher-Yates shuffle, O(n) time complexity
-        Card[] tempArray = new Card[52];
-        for(int i = 0; i < 52;i++){
+        Card[] tempArray = new Card[MAX_CAPACITY];
+        for(int i = 0; i < MAX_CAPACITY;i++){
             tempArray[i] = (Card) deal(); //first step is to pop cards into array for shuffling
         }
         Random ran = new Random();
@@ -40,7 +40,7 @@ public class Deck<T> implements StackInterface<T>{
             int j = ran.nextInt(i+1);
             Card temp = tempArray[i]; //card object created to remember card at [i] for later swapping
             tempArray[i] = tempArray[j]; //swap element [i] with element [j](random number)
-            tempArray[j] = temp;
+            tempArray[j] = temp; // element [j] is now original card from [i]
         }
         for (Card card : tempArray) { //after shuffle, push cards onto deck
             stash((T) card);

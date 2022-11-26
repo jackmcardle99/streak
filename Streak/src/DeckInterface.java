@@ -1,4 +1,4 @@
-public interface StackInterface<T> {
+public interface DeckInterface<T> {
     /*
     this interface should contain behaviours for manipulating the stack
     - pop (deal)

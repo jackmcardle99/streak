@@ -25,10 +25,15 @@ public class Card implements Comparable<Card> {
         return SUITS[SUIT];
     }
 
+    public boolean isSameSuit(Card otherCard){
+        return this.getSuit().equals(otherCard.getSuit());
+    }
+
     public String getColour(){
-        if (getSuit().equals(SUITS[0]) || getSuit().equals(SUITS[2])) return "black";
+        if(this.getSuit().equals(SUITS[0]) || this.getSuit().equals(SUITS[2])) return "black";
         else return "red";
     }
+
 
     public int getRankValue(){
         return RANK;
@@ -37,13 +42,11 @@ public class Card implements Comparable<Card> {
 
     @Override
     public int compareTo(Card otherCard) {
-        if(this.getRankValue() < otherCard.getRankValue()) return -1;
-        else if (this.getRankValue() > otherCard.getRankValue()) return 1;
-        else return 0;
+        if(getRankValue() == otherCard.getRankValue()) return 0;
+        else if (getRankValue() == otherCard.getRankValue() -1) return -1;
+        else return 1;
     }
 
-
-    //if suit = diamond or heart, suit = red
     //class will be used to create card objects to populate data structures
     //attributes should include - suit, colour, rank, rank value
 

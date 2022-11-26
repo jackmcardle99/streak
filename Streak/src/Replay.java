@@ -1,4 +1,4 @@
-public class Replay<T> implements StackInterface<T>{
+public class Replay<T> implements DeckInterface<T>{
     @Override
     public T deal() {
         return null;
