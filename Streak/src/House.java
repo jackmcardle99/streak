@@ -1,3 +1,5 @@
+import jdk.swing.interop.SwingInterOpUtils;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -78,25 +80,69 @@ public class House {
         }
     }
 
+//    private static int maxStreak(){ // streak is now working for consecutive cards, now just need to update score based on colour and suit
+//        int handSize = hand.getCapacity(), maxStreak = 1, streak = 1, colourCount = 1, suitCount = 1;
+//        Card[] arr = hand.toArray();
+//        Card card1 = arr[0], card2;
+//        for(int i = 1; i < handSize; i++) {
+//            card2 = arr[i];
+//            if (card1.compareTo(card2) < 0) {
+//                streak++;
+//                if (card1.isSameSuit(card2)) {
+//                    System.out.println("SAME SUIT!");
+//                    suitCount++;
+//                }
+//                if (card1.getColour().equals(card2.getColour())) {
+//                    System.out.println("SAME COLOUR!");
+//                    colourCount++;
+//                }
+//            }
+//            if (card1.compareTo(card2) > 0) {
+//                streak = 1;
+//                colourCount = 1;
+//                suitCount = 1;
+//            }
+//            if(streak > maxStreak){
+//                maxStreak = streak;
+//            }
+//            card1 = card2;
+//        }
+//       // if(colourCount == streak) maxStreak++;
+//        //if(suitCount == streak) maxStreak = maxStreak+2;
+//        return maxStreak;
+//    }
+
     private static int maxStreak(){ // streak is now working for consecutive cards, now just need to update score based on colour and suit
-        int handSize = hand.getCapacity(), maxStreak = 1, streak = 1;
+        int handSize = hand.getCapacity(), maxStreak = 1, streak = 1, colourCount = 0, suitCount = 0;
         Card[] arr = hand.toArray();
         Card card1 = arr[0], card2;
         for(int i = 1; i < handSize; i++) {
             card2 = arr[i];
-            if(card1.compareTo(card2) < 0){
+            if (card1.compareTo(card2) < 0) { // if adjacent cards are the streaked
                 streak++;
+                if (card1.getSuit().equals(card2.getSuit())) {
+                    suitCount++;
+                }
+                if (card1.getColour().equals(card2.getColour())) {
+                    colourCount++;
+                }
             }
-            if(card1.compareTo(card2) > 0){
-                streak = 1;
+            if (card1.compareTo(card2) > 0) { // if the cards are not streaked, then reset streak counter and
+                streak = 1;                   // reset counter for same colour/suit
+                colourCount = 0;
+                suitCount = 0;
             }
-            if(streak > maxStreak){
+            if(streak > maxStreak){ // if the current streak is greater than max streak, then update streak
                 maxStreak = streak;
             }
+            int currStreak = maxStreak; // temp variable to compare suit and colour count against
+            if(colourCount == currStreak-1 && colourCount!= 0) maxStreak = maxStreak + 1;
+            if(suitCount == currStreak-1 && colourCount!= 0) maxStreak = maxStreak+2;
             card1 = card2;
         }
         return maxStreak;
     }
+
 
     public void toPutIntoTestClass(){
         //System.out.println("-----------------------------UNSHUFFLED---------------------");
