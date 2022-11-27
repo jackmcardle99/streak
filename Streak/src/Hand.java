@@ -1,5 +1,3 @@
-import java.lang.reflect.Array;
-import java.util.Arrays;
 import java.util.EmptyStackException;
 
 public class Hand<T> implements HandInterface<T>{
@@ -30,7 +28,7 @@ public class Hand<T> implements HandInterface<T>{
         else return topNode.getData();
     }
 
-    private static void swap(Card[] arr, int first, int second){
+    private static void swap(Card[] arr, int first, int second){ // Swap method for quicksort
         Card temp = arr[first];
         arr[first] = arr[second];
         arr[second] = temp;
@@ -62,7 +60,7 @@ public class Hand<T> implements HandInterface<T>{
        arrToStack(quickSort(toArray(), 0, last));
     }
 
-    private void arrToStack(Card[] arr){
+    public void arrToStack(Card[] arr){
         for (int i = arr.length-1; i >= 0; i--) {
             stash((T) arr[i]); // array of cards put back into stack in ascending order
         }
@@ -81,5 +79,9 @@ public class Hand<T> implements HandInterface<T>{
 
     public int getCapacity(){
         return numberOfCards;
-    }
+    } //returns current size of hand
+
+    public int getMaxCapacity(){return MAX_CAPACITY;} // returns max size of hand
+
+    public int getDefaultCapacity(){return  DEFAULT_CAPACITY;} // returns min size of hand
 }
