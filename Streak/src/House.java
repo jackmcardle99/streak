@@ -10,6 +10,7 @@ public class House {
 
     This class acts as the main game logic class, the "house" aka dealer.
      */
+
     static Deck<Card> deck = new Deck<>();
     static Hand<Card> hand = new Hand<>();
     static String[] scoreboard;
@@ -63,7 +64,7 @@ public class House {
             System.out.println("\nMax streak  :  " + maxStreak());
             swapCard(swaps);
             swaps--;
-        }while(swaps >= 0);
+        }while(swaps >=  0);
     }
 
     public static void twoPlayer(){}
@@ -100,79 +101,41 @@ public class House {
         }
     }
 
-//    private static int maxStreak(){ // streak is now working for consecutive cards, now just need to update score based on colour and suit
-//        int handSize = hand.getCapacity(), maxStreak = 1, streak = 1, colourCount = 0, suitCount = 0;
-//        Card[] arr = hand.toArray();
-//        Card card1 = arr[0], card2;
-//        for(int i = 1; i < handSize; i++) {
-//            card2 = arr[i];
-//            if (card1.compareTo(card2) < 0) { // if adjacent cards are the streaked
-//                streak++;
-//                if (card1.getSuit().equals(card2.getSuit())) {
-//                    suitCount++;
-//                }
-//                if (card1.getColour().equals(card2.getColour())) {
-//                    colourCount++;
-//                }
-//            }
-//            if (card1.compareTo(card2) > 0) { // if the cards are not streaked, then reset streak counter and
-//                streak = 1;                   // reset counter for same colour/suit
-//                colourCount = 0;
-//                suitCount = 0;
-//            }
-//            if(streak > maxStreak){ // if the current streak is greater than max streak, then update streak
-//                maxStreak = streak;
-//            }
-//            int currStreak = maxStreak; // temp variable to compare suit and colour count against
-//            if(colourCount == currStreak-1 && colourCount!= 0) maxStreak = maxStreak + 1;
-//            if(suitCount >= currStreak-1 && colourCount!= 0) maxStreak = maxStreak+2;
-//            card1 = card2;
-//        }
-//        hand.arrToStack(arr);
-//        return maxStreak;
-//    }
-
-    private static int maxStreak(){ // streak is now working for consecutive cards, now just need to update score based on colour and suit
-        int handSize = hand.getCapacity(), maxStreak = 1, streak = 1, colourCount = 0, suitCount = 0;
+    private static int maxStreak(){
+        int handSize = hand.getCapacity(), maxStreak = 1, streak = 1, bonusStreak = 0, colourS = 1, suitBonus = 2;
         Card[] arr = hand.toArray();
         Card card1 = arr[0], card2;
+        boolean suitBonusActive = false, colourBonusActive = false;
         for(int i = 1; i < handSize; i++) {
             card2 = arr[i];
-            if (card1.compareTo(card2) < 0) { // if adjacent cards are the streaked
+            if (card1.compareTo(card2) < 0) { // IF CARD1 AND CARD2 CONSECUTIVELY STREAKED
                 streak++;
-                if (card1.getSuit().equals(card2.getSuit())) {
-                    suitCount++;
-                }
-                if (card1.getColour().equals(card2.getColour())) {
-                    colourCount++;
-                }
+                suitBonusActive = card1.getSuit().equals(card2.getSuit()); //true if suits are same
+                if (suitBonusActive && !colourBonusActive) bonusStreak = streak + 3;
+                colourBonusActive = card1.getColour().equals(card2.getColour()); //true if compared cards are same colour
+                if (colourBonusActive && !suitBonusActive) bonusStreak = streak + 1;  //if bonus streak > higher streak then streak = bonustreak
             }
-            if (card1.compareTo(card2) > 0) { // if the cards are not streaked, then reset streak counter and
+            if (card1.compareTo(card2) > 0) { // IF CARD1 AND CARD2 ARE NOT CONSECUTIVELY STREAKED
                 streak = 1;                   // reset counter for same colour/suit
-                colourCount = 0;
-                suitCount = 0;
+                bonusStreak = 0;
             }
-
-            int currStreak = streak; // temp variable to compare suit and colour count against
-            if(colourCount == currStreak-1 && colourCount!= 0) streak = streak + 1;
-            if(suitCount >= currStreak-1 && colourCount!= 0) streak = streak+2;
-            if(streak > maxStreak){ // if the current streak is greater than max streak, then update streak
-                maxStreak = streak;
-            }
+            if(bonusStreak > maxStreak || streak > maxStreak) maxStreak = Math.max(bonusStreak, streak);
+            bonusStreak = 0;
             card1 = card2;
         }
         hand.arrToStack(arr);
         return maxStreak;
     }
 
-    private static void swapCard(int swapsLeft){
-        char lower = (char)65; //lower bound (A)
+    private static void swapCard(int swapsLeft){ // player needs to be able to exit game with current streak
+        char lower = (char)65; //lower bound (A) //rather than having to do all swaps
         int difference = 65 + hand.getCapacity();
         char upper = (char)difference; // upperbound (J)
         while(true){
             Scanner scan = new Scanner(System.in);
             char userChar;
-            System.out.println("\nIf you'd like to swap a card, enter the equivalent letter. You have " + swapsLeft + " swaps left >");
+            System.out.println("\nIf you'd like to swap a card, enter the equivalent letter. Or press T to exit." +
+                    " You have " + swapsLeft + " swaps left >");
             userChar = scan.next().charAt(0);
             if(userChar < lower || userChar > upper){
                 System.out.println("Please enter valid letter.");

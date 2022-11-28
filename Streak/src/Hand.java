@@ -84,4 +84,8 @@ public class Hand<T> implements HandInterface<T>{
     public int getMaxCapacity(){return MAX_CAPACITY;} // returns max size of hand
 
     public int getDefaultCapacity(){return  DEFAULT_CAPACITY;} // returns min size of hand
+
+    public void clear(){
+        topNode = null;
+    }
 }

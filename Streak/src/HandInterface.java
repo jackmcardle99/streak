@@ -9,4 +9,6 @@ public interface HandInterface<T> {
     public void display();
 
     public void sort();
+
+    public void clear();
 }

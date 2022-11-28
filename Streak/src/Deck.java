@@ -56,7 +56,6 @@ public class Deck<T> implements DeckInterface<T>{
         }
     }
 
-
     public T[] toArray(Deck<T> deckToArray){
         return null;
     }
