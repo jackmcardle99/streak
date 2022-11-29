@@ -59,6 +59,7 @@ public class Deck<T> implements DeckInterface<T>{
     public T[] toArray(Deck<T> deckToArray){
         return null;
     }
+    @Override
     public void clear(){
         topNode = null;
     }
@@ -66,10 +67,4 @@ public class Deck<T> implements DeckInterface<T>{
     public int getCapacity(){
         return numberOfCards;
     }
-    /*
-    - this class will contain the methods for behaviours on deck of cards
-    - should have max capacity of 52 cards
-    include test main method to test stack methods
-     */
-
-}
+   }

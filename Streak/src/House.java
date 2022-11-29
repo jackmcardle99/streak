@@ -100,27 +100,37 @@ public class House {
             hand.stash(deck.deal());
         }
     }
-
-    private static int maxStreak(){
-        int handSize = hand.getCapacity(), maxStreak = 1, streak = 1, bonusStreak = 0, colourS = 1, suitBonus = 2;
+    // CONSECUTIVE STREAK TAKES PRECEDENCE OVER SUIT AND COLOUR BONUS FOR SOME REASON
+    private static int maxStreak(){ //IF THERE IS A SUIT BONUS, BUT CARD BEFORE IS LOWER BY ONE AND DIFFERENT SUIT, IT COUNTS AS EXTRA STREAK POINT, THIS SHOULD NOT HAPPEN
+        int handSize = hand.getCapacity(), maxStreak = 1, streak = 1, bonusStreak = 0, newStreak = 1;
         Card[] arr = hand.toArray();
         Card card1 = arr[0], card2;
         boolean suitBonusActive = false, colourBonusActive = false;
         for(int i = 1; i < handSize; i++) {
             card2 = arr[i];
+            suitBonusActive = card1.getSuit().equals(card2.getSuit()); //true if suits are same
+            colourBonusActive = card1.getColour().equals(card2.getColour()); //true if compared cards are same colour
             if (card1.compareTo(card2) < 0) { // IF CARD1 AND CARD2 CONSECUTIVELY STREAKED
                 streak++;
-                suitBonusActive = card1.getSuit().equals(card2.getSuit()); //true if suits are same
-                if (suitBonusActive && !colourBonusActive) bonusStreak = streak + 3;
-                colourBonusActive = card1.getColour().equals(card2.getColour()); //true if compared cards are same colour
-                if (colourBonusActive && !suitBonusActive) bonusStreak = streak + 1;  //if bonus streak > higher streak then streak = bonustreak
+
+                if (suitBonusActive){
+                    newStreak++;
+                    bonusStreak = newStreak + 3;
+                }
+
+                if (colourBonusActive && !suitBonusActive){
+                    newStreak++;
+                    bonusStreak = newStreak+ 1; //if bonus streak > higher streak then streak = bonustreak
+                }
             }
+
             if (card1.compareTo(card2) > 0) { // IF CARD1 AND CARD2 ARE NOT CONSECUTIVELY STREAKED
                 streak = 1;                   // reset counter for same colour/suit
                 bonusStreak = 0;
+                newStreak = 1;
             }
             if(bonusStreak > maxStreak || streak > maxStreak) maxStreak = Math.max(bonusStreak, streak);
-            bonusStreak = 0;
+            //bonusStreak = 0;
             card1 = card2;
         }
         hand.arrToStack(arr);
