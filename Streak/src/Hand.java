@@ -41,8 +41,7 @@ public class Hand<T> implements HandInterface<T>{
         arr[second] = temp;
     }
 
-    public Card[] toArray(){
-        int handSize = getCapacity();
+    public Card[] toArray(int handSize){
         Card[] tempArr = new Card[handSize];
         for(int i = 0; i < handSize; i++){
             tempArr[i] = (Card) deal();
@@ -62,13 +61,11 @@ public class Hand<T> implements HandInterface<T>{
         return tempArr;
     }
 
-    public void sort(){
-       int last = getCapacity() - 1;
-       arrToStack(quickSort(toArray(), 0, last));
+    public void sort(int handSize){
+        arrToStack(quickSort(toArray(handSize),0, handSize-1));
     }
 
     public void arrToStack(Card[] arr){
-
         for (int i = arr.length-1; i >= 0; i--) {
             stash((T) arr[i]); // array of cards put back into stack in ascending order
         }
@@ -83,7 +80,7 @@ public class Hand<T> implements HandInterface<T>{
             c++; // increment char ascii value by 1 each time A,B,C,D,E... etc
             current = current.getNext();
         }
-    }
+    } // add empty stakc exception
 
     public int getCapacity(){
         return numberOfCards;

@@ -63,7 +63,7 @@ public class Deck<T> implements DeckInterface<T>{
             System.out.println(current.getData());
             current = current.getNext();
         }
-    }
+    } // add empty stack exception
 
     public T[] toArray(Deck<T> deckToArray){
         return null;

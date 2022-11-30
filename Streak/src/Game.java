@@ -11,30 +11,28 @@ public class Game {
     This class acts as the main game logic class, the "house" aka dealer.
      */
     static String[] scoreboard;
-    static Singleplayer sp = new Singleplayer();
-    static Multiplayer mp = new Multiplayer();
-
     public static void main(String[] args){
         menu();
     }
 
     public static void menu(){
+        Streak sp = new Streak();
         Scanner scan = new Scanner(System.in);
         System.out.println("""
+                Welcome to Streak! 
                 Please choose from the options available
                 (1) Single player
                 (2) Two player
-                (3) Scores
+                (3) Rules
+                (4) Score table
                 (4) Exit""");
         String userInput = scan.nextLine();
         switch (userInput) {
-            case "1" -> sp.play();
-            case "2" -> mp.play();
-            case "3" -> System.out.println("Need to make leaderboard");
-            case "4" -> {
-                System.out.println("Thanks for playing!");
-                System.exit(0);
-            }
+            case "1" -> sp.play(true); // pass true for singleplayer, false for two player
+            case "2" -> sp.play(false);
+            case "3" -> rules();
+            case "4" -> System.out.println("Need to make leaderboard");
+            case "5" -> System.out.println("Thanks for playing!");
         }
     }
 
@@ -51,7 +49,7 @@ public class Game {
         while(true){
             Scanner scan = new Scanner(System.in);
             try {
-                System.out.println("Please choose the size of your hand. (Between 5-10 cards) > ");
+                System.out.println("Please choose the size of the hand being played. (Between 5-10 cards) > ");
                 handSize = scan.nextInt();
                 if(handSize < HAND.getDefaultCapacity() || handSize > HAND.getMaxCapacity()){ // hand size range based
                     System.out.println("Please ensure hand is between 5-10 cards in size.");  // on default and max cap
@@ -64,9 +62,9 @@ public class Game {
         return handSize;
     }
 
-    public int maxStreak(Hand<Card> hand, int handSize){
+    public int calculateStreak(Hand<Card> hand, int handSize){
         int maxStreak = 1, streak = 1, bonusStreak = 1, bonus = 0;
-        Card[] arr = hand.toArray();
+        Card[] arr = hand.toArray(handSize);
         Card card1 = arr[0], card2;
         boolean suitBonusActive = false, colourBonusActive = false;
         for(int i = 1; i < handSize; i++) {
@@ -121,12 +119,16 @@ public class Game {
                 System.out.println("Please enter valid letter.");
             }
             else {
-                Card[] arr = hand.toArray();
+                Card[] arr = hand.toArray(handSize);
                 //arr[cardToSwap] = replay.stash(); // FOR REPLAY deck LATER
                 arr[userChar-65] = deck.deal();
                 hand.arrToStack(arr);
                 return true;
             }
         }
+    }
+
+    private static void rules(){
+        System.out.println("Rules will be here.");
     }
 }

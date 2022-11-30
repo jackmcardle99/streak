@@ -6,7 +6,7 @@ public interface HandInterface<T> {
 
     public T peek();
 
-    public void fill(int handSize, Deck<Card> deck);  // THESE ARE NOT GENERIC TYPES
+    public void fill(int handSize, Deck<Card> deck);  // THESE ARE NOT GENERIC TYPES ASK ADRIAN ABOUT THIS
     /*
     This method will be used to fill the hand.
      */
@@ -15,7 +15,7 @@ public interface HandInterface<T> {
 
     //void fill(int handSize, Deck<Card> deck);
 
-    public void sort();
+    public void sort(int handSize);
 
     public void clear();
 }

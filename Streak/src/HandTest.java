@@ -7,7 +7,7 @@ public class HandTest {
         deck.display();
         fillHand();
         hand.display();
-        System.out.println(maxStreak());
+        //System.out.println(maxStreak());
     }
 //    private static int maxStreak(){ // streak is now working for consecutive cards, now just need to update score based on colour and suit
 //        int handSize = hand.getCapacity(), maxStreak = 1, streak = 1, suitCount = 0, colourCount = 0;
@@ -169,50 +169,50 @@ public class HandTest {
 //        return maxStreak;
 //    }
 
-    private static int maxStreak(){ // streak is now working for consecutive cards, now just need to update score based on colour and suit
-        int handSize = hand.getCapacity(), maxStreak = 1, streak = 1;
-        Card[] arr = hand.toArray();
-        Card card1 = arr[0], card2;
-        boolean suitBonusActive =false;
-        boolean colourBonusActive = false;
-        for(int i = 1; i < handSize; i++) {
-            card2 = arr[i];
-            if (card1.compareTo(card2) < 0) { // IF ADJACENT CARDS ARE +1 IN ORDER
-                streak++;
-                if(card1.getSuit().equals(card2.getSuit()) && !suitBonusActive){
-                    suitBonusActive =true;
-                }
-                if(card1.getSuit().equals(card2.getSuit()) && suitBonusActive) suitBonusActive = false;
-                if (!card1.getSuit().equals(card2.getSuit())) {
-                    if(suitBonusActive) streak = streak-2;
-                    suitBonusActive = false;
-                }
-                //System.out.println("Same suit bonus = " + sameSuit);
-                if(card1.getColour().equals(card2.getColour())){
-                    colourBonusActive = true;
-                }
-                if(card1.getColour().equals(card2.getColour()) && colourBonusActive) colourBonusActive = false;
-                if (!card2.getColour().equals(card2.getColour())) {
-                    if(colourBonusActive) streak--;
-                    colourBonusActive = false;
-                }
-            }
-            if (card1.compareTo(card2) > 0) { // IF CARDS ARE NOT +1 IN ORDER
-                streak = 1;                   // reset counter for same colour/suit
-                colourBonusActive = false;
-                suitBonusActive = false;
-            }
-            if(suitBonusActive && card1.getSuit().equals(card2.getSuit())) streak = streak + 2;//streak = streak+2;
-            if(colourBonusActive && card1.getColour().equals(card2.getColour())) streak++;
-            if(streak > maxStreak){ // if the current streak is greater than max streak, then update streak
-                maxStreak = streak;
-            }
-            card1 = card2;
-        }
-
-        hand.arrToStack(arr);
-        return maxStreak;
-    }
+//    private static int maxStreak(){ // streak is now working for consecutive cards, now just need to update score based on colour and suit
+//        int handSize = hand.getCapacity(), maxStreak = 1, streak = 1;
+//        Card[] arr = hand.toArray();
+//        Card card1 = arr[0], card2;
+//        boolean suitBonusActive =false;
+//        boolean colourBonusActive = false;
+//        for(int i = 1; i < handSize; i++) {
+//            card2 = arr[i];
+//            if (card1.compareTo(card2) < 0) { // IF ADJACENT CARDS ARE +1 IN ORDER
+//                streak++;
+//                if(card1.getSuit().equals(card2.getSuit()) && !suitBonusActive){
+//                    suitBonusActive =true;
+//                }
+//                if(card1.getSuit().equals(card2.getSuit()) && suitBonusActive) suitBonusActive = false;
+//                if (!card1.getSuit().equals(card2.getSuit())) {
+//                    if(suitBonusActive) streak = streak-2;
+//                    suitBonusActive = false;
+//                }
+//                //System.out.println("Same suit bonus = " + sameSuit);
+//                if(card1.getColour().equals(card2.getColour())){
+//                    colourBonusActive = true;
+//                }
+//                if(card1.getColour().equals(card2.getColour()) && colourBonusActive) colourBonusActive = false;
+//                if (!card2.getColour().equals(card2.getColour())) {
+//                    if(colourBonusActive) streak--;
+//                    colourBonusActive = false;
+//                }
+//            }
+//            if (card1.compareTo(card2) > 0) { // IF CARDS ARE NOT +1 IN ORDER
+//                streak = 1;                   // reset counter for same colour/suit
+//                colourBonusActive = false;
+//                suitBonusActive = false;
+//            }
+//            if(suitBonusActive && card1.getSuit().equals(card2.getSuit())) streak = streak + 2;//streak = streak+2;
+//            if(colourBonusActive && card1.getColour().equals(card2.getColour())) streak++;
+//            if(streak > maxStreak){ // if the current streak is greater than max streak, then update streak
+//                maxStreak = streak;
+//            }
+//            card1 = card2;
+//        }
+//
+//        hand.arrToStack(arr);
+//        return maxStreak;
+//    }
 
 //    private static int maxStreak(){ // streak is now working for consecutive cards, now just need to update score based on colour and suit
 //        int handSize = hand.getCapacity(), maxStreak = 1, streak = 1, colourCount = 0, suitCount = 0;
