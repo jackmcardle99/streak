@@ -28,6 +28,13 @@ public class Hand<T> implements HandInterface<T>{
         else return topNode.getData();
     }
 
+    @Override
+    public void fill(int handSize, Deck<Card> deck){
+        for(int i = 0; i < handSize; i++){
+            stash((T) deck.deal());
+        }
+    }
+
     private static void swap(Card[] arr, int first, int second){ // Swap method for quicksort
         Card temp = arr[first];
         arr[first] = arr[second];

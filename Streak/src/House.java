@@ -39,37 +39,38 @@ public class House {
         }
     }
 
-    private static void fillDeck(){
-        for (int suit = 0; suit <= 3; suit++) {
-            for (int rank = 0; rank < 13; rank++) {
-                 deck.stash(new Card(rank, suit));
-            }
-        }
-    }
-
     public static void singlePlayer(){
         String playerName = createPlayer();
-        fillDeck();
+        deck.fill();
         deck.shuffle();
-        fillHand(chooseHandSize());
+        hand.fill(chooseHandSize(),deck);
         hand.sort();
         play(playerName,null);
     }
 
     public static void play(String playerOne, String playerTwo){
         int swaps = hand.getCapacity(); // amount of rounds is equal to hand size
-        do{
-            System.out.println("Player  : " + playerOne );
-            hand.display();
-            System.out.println("\nMax streak  :  " + maxStreak());
-            swapCard(swaps);
+        System.out.println("Player  : " + playerOne );
+        System.out.println("\nMax streak  :  " + maxStreak());
+        hand.display();
+        boolean cont = true;
+        while(swaps > 0){
+            cont = swapCard(swaps); // if false returned, round ends
+            if(!cont) break;
             swaps--;
-        }while(swaps >=  0);
+            hand.sort();
+            System.out.println("Player  : " + playerOne );
+            System.out.println("\nMax streak  :  " + maxStreak());
+            hand.display();
+        }
+        // SAVE THE SCORE TO SCOREBOARD FROM HERE IF IT IS ABOVE CURRENT PLAYERS
+        System.out.println("DONE");
     }
 
     public static void twoPlayer(){}
 
     public static void scoreboard(){}
+
 
     private static String createPlayer (){
         String playerName;
@@ -95,14 +96,9 @@ public class House {
         }
         return handSize;
     }
-    private static void fillHand(int handSize){
-        for(int i = 0; i < handSize; i++){
-            hand.stash(deck.deal());
-        }
-    }
-    // CONSECUTIVE STREAK TAKES PRECEDENCE OVER SUIT AND COLOUR BONUS FOR SOME REASON
-    private static int maxStreak(){ //IF THERE IS A SUIT BONUS, BUT CARD BEFORE IS LOWER BY ONE AND DIFFERENT SUIT, IT COUNTS AS EXTRA STREAK POINT, THIS SHOULD NOT HAPPEN
-        int handSize = hand.getCapacity(), maxStreak = 1, streak = 1, bonusStreak = 0, newStreak = 1;
+
+    private static int maxStreak(){
+        int handSize = hand.getCapacity(), maxStreak = 1, streak = 1, bonusStreak = 1, bonus = 0;
         Card[] arr = hand.toArray();
         Card card1 = arr[0], card2;
         boolean suitBonusActive = false, colourBonusActive = false;
@@ -110,43 +106,56 @@ public class House {
             card2 = arr[i];
             suitBonusActive = card1.getSuit().equals(card2.getSuit()); //true if suits are same
             colourBonusActive = card1.getColour().equals(card2.getColour()); //true if compared cards are same colour
-            if (card1.compareTo(card2) < 0) { // IF CARD1 AND CARD2 CONSECUTIVELY STREAKED
-                streak++;
 
-                if (suitBonusActive){
-                    newStreak++;
-                    bonusStreak = newStreak + 3;
+            ///////////////////// THIS DECISION STRUCTURE APPLIES IF CARD2 IS + 1 TO CARD1 ////////////////////////
+            if (card1.compareTo(card2) < 0) {
+                streak++; // add one to streak
+                if (suitBonusActive){ // if the compared cards are streaked AND they are the same suit
+                    bonusStreak++; // create new streak counter and increment
+                    colourBonusActive = false; // if card are same suit, then colour bonus is irrelevant
+                    bonus = 2;
+                    //bonusStreak = bonusStreak + 2; //bonus streak comprises new streak and bonus points
+                    System.out.println("\nsuit BONUS " + (bonusStreak+2) + "        CARDS CHECKED ===== " + card1 + " AGAINST " + card2);
                 }
-
-                if (colourBonusActive && !suitBonusActive){
-                    newStreak++;
-                    bonusStreak = newStreak+ 1; //if bonus streak > higher streak then streak = bonustreak
+                if (colourBonusActive){ // if the compared cards are streaked AND the same colour
+                    bonusStreak++;
+                    bonus = 1;
+//                    bonusStreak++;
+                    System.out.println("\nColour BONUS " + (bonusStreak+1) + "        CARDS CHECKED ===== " + card1 + " AGAINST " + card2);
                 }
+                System.out.println("ORDINARY STREAK = " + streak + "        CARDS CHECKED ===== " + card1 + " AGAINST " + card2);
             }
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////// THIS DECISION STRUCTURE APPLIES IF CARDS ARE NOT STREAKED ////////////////////////
+            if (card1.compareTo(card2) > 0) {
+                streak = 1; // reset streak values
+                bonusStreak = 1;
+            }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            if (card1.compareTo(card2) > 0) { // IF CARD1 AND CARD2 ARE NOT CONSECUTIVELY STREAKED
-                streak = 1;                   // reset counter for same colour/suit
-                bonusStreak = 0;
-                newStreak = 1;
+            // Determine which type of streak is greater, then update max streak with new value
+            if((bonusStreak+bonus) > maxStreak || streak > maxStreak){
+                maxStreak = Math.max((bonusStreak+bonus), streak);
             }
-            if(bonusStreak > maxStreak || streak > maxStreak) maxStreak = Math.max(bonusStreak, streak);
-            //bonusStreak = 0;
-            card1 = card2;
+            card1 = card2; // update next set of cards to be compared
         }
         hand.arrToStack(arr);
         return maxStreak;
     }
 
-    private static void swapCard(int swapsLeft){ // player needs to be able to exit game with current streak
+    private static boolean swapCard(int swapsLeft){ // player needs to be able to exit game with current streak
         char lower = (char)65; //lower bound (A) //rather than having to do all swaps
         int difference = 65 + hand.getCapacity();
         char upper = (char)difference; // upperbound (J)
         while(true){
             Scanner scan = new Scanner(System.in);
             char userChar;
-            System.out.println("\nIf you'd like to swap a card, enter the equivalent letter. Or press T to exit." +
-                    " You have " + swapsLeft + " swaps left >");
+            System.out.println("\nIf you'd like to swap a card, enter the equivalent letter. " +
+                    "Otherwise press T to exit and save your streak. You have " + swapsLeft + " swaps left >");
             userChar = scan.next().charAt(0);
+            if(userChar == 'T' || userChar == 't'){
+                return false; //
+            }
             if(userChar < lower || userChar > upper){
                 System.out.println("Please enter valid letter.");
             }
@@ -155,7 +164,7 @@ public class House {
                 //arr[cardToSwap] = replay.stash(); // FOR REPLAY deck LATER
                 arr[userChar-65] = deck.deal();
                 hand.arrToStack(arr);
-                break;
+                return true;
             }
         }
     }

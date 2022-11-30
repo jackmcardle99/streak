@@ -23,6 +23,11 @@ public interface DeckInterface<T> {
     This method allows for viewing the top item of the stack without adding or removing it.
      */
 
+    public void fill();
+    /*
+    This method allows for filling the deck back to 52 cards.
+     */
+
     public void shuffle();
     /*
     This method shuffles the contents of the stack.
