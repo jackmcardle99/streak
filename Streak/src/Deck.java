@@ -31,7 +31,6 @@ public class Deck<T> implements DeckInterface<T>{
 
     @Override
     public  void fill(){
-        clear(); // first clear the deck of any remaining cards
         for (int suit = 0; suit <= 3; suit++) {
             for (int rank = 0; rank < 13; rank++) {
                 stash((T) new Card(rank, suit));

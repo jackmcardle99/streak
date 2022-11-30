@@ -1,7 +1,7 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-public class House {
+public class Game {
 
     /*
     AUTHOR : Jack McArdle
@@ -10,16 +10,15 @@ public class House {
 
     This class acts as the main game logic class, the "house" aka dealer.
      */
-
-    static Deck<Card> deck = new Deck<>();
-    static Hand<Card> hand = new Hand<>();
     static String[] scoreboard;
+    static Singleplayer sp = new Singleplayer();
+    static Multiplayer mp = new Multiplayer();
 
     public static void main(String[] args){
         menu();
     }
 
-    private static void menu(){
+    public static void menu(){
         Scanner scan = new Scanner(System.in);
         System.out.println("""
                 Please choose from the options available
@@ -29,9 +28,9 @@ public class House {
                 (4) Exit""");
         String userInput = scan.nextLine();
         switch (userInput) {
-            case "1" -> singlePlayer();
-            case "2" -> twoPlayer();
-            case "3" -> scoreboard();
+            case "1" -> sp.play();
+            case "2" -> mp.play();
+            case "3" -> System.out.println("Need to make leaderboard");
             case "4" -> {
                 System.out.println("Thanks for playing!");
                 System.exit(0);
@@ -39,54 +38,22 @@ public class House {
         }
     }
 
-    public static void singlePlayer(){
-        String playerName = createPlayer();
-        deck.fill();
-        deck.shuffle();
-        hand.fill(chooseHandSize(),deck);
-        hand.sort();
-        play(playerName,null);
-    }
-
-    public static void play(String playerOne, String playerTwo){
-        int swaps = hand.getCapacity(); // amount of rounds is equal to hand size
-        System.out.println("Player  : " + playerOne );
-        System.out.println("\nMax streak  :  " + maxStreak());
-        hand.display();
-        boolean cont = true;
-        while(swaps > 0){
-            cont = swapCard(swaps); // if false returned, round ends
-            if(!cont) break;
-            swaps--;
-            hand.sort();
-            System.out.println("Player  : " + playerOne );
-            System.out.println("\nMax streak  :  " + maxStreak());
-            hand.display();
-        }
-        // SAVE THE SCORE TO SCOREBOARD FROM HERE IF IT IS ABOVE CURRENT PLAYERS
-        System.out.println("DONE");
-    }
-
-    public static void twoPlayer(){}
-
-    public static void scoreboard(){}
-
-
-    private static String createPlayer (){
+    public Player createPlayer (){
         String playerName;
         Scanner scan = new Scanner(System.in);
         System.out.println("Please enter your name > ");
-        return playerName = scan.nextLine();
+        return new Player(playerName = scan.nextLine(), 0);
     }
 
-    private static int chooseHandSize(){
+    public int chooseHandSize(){
+        Hand<Card> HAND = new Hand<Card>(); //for fetching hand size
         int handSize = 0;
         while(true){
             Scanner scan = new Scanner(System.in);
             try {
                 System.out.println("Please choose the size of your hand. (Between 5-10 cards) > ");
                 handSize = scan.nextInt();
-                if(handSize < hand.getDefaultCapacity() || handSize > hand.getMaxCapacity()){ // hand size range based
+                if(handSize < HAND.getDefaultCapacity() || handSize > HAND.getMaxCapacity()){ // hand size range based
                     System.out.println("Please ensure hand is between 5-10 cards in size.");  // on default and max cap
                 }
                 else break;
@@ -97,8 +64,8 @@ public class House {
         return handSize;
     }
 
-    private static int maxStreak(){
-        int handSize = hand.getCapacity(), maxStreak = 1, streak = 1, bonusStreak = 1, bonus = 0;
+    public int maxStreak(Hand<Card> hand, int handSize){
+        int maxStreak = 1, streak = 1, bonusStreak = 1, bonus = 0;
         Card[] arr = hand.toArray();
         Card card1 = arr[0], card2;
         boolean suitBonusActive = false, colourBonusActive = false;
@@ -114,16 +81,11 @@ public class House {
                     bonusStreak++; // create new streak counter and increment
                     colourBonusActive = false; // if card are same suit, then colour bonus is irrelevant
                     bonus = 2;
-                    //bonusStreak = bonusStreak + 2; //bonus streak comprises new streak and bonus points
-                    System.out.println("\nsuit BONUS " + (bonusStreak+2) + "        CARDS CHECKED ===== " + card1 + " AGAINST " + card2);
                 }
                 if (colourBonusActive){ // if the compared cards are streaked AND the same colour
                     bonusStreak++;
                     bonus = 1;
-//                    bonusStreak++;
-                    System.out.println("\nColour BONUS " + (bonusStreak+1) + "        CARDS CHECKED ===== " + card1 + " AGAINST " + card2);
                 }
-                System.out.println("ORDINARY STREAK = " + streak + "        CARDS CHECKED ===== " + card1 + " AGAINST " + card2);
             }
             ///////////////////////////////////////////////////////////////////////////////////////////////////////
             ///////////////////// THIS DECISION STRUCTURE APPLIES IF CARDS ARE NOT STREAKED ////////////////////////
@@ -132,7 +94,6 @@ public class House {
                 bonusStreak = 1;
             }
             //////////////////////////////////////////////////////////////////////////////////////////////////////
-
             // Determine which type of streak is greater, then update max streak with new value
             if((bonusStreak+bonus) > maxStreak || streak > maxStreak){
                 maxStreak = Math.max((bonusStreak+bonus), streak);
@@ -143,9 +104,9 @@ public class House {
         return maxStreak;
     }
 
-    private static boolean swapCard(int swapsLeft){ // player needs to be able to exit game with current streak
+    public boolean swapCard(Hand<Card> hand, Deck<Card> deck, int swapsLeft, int handSize){ // player needs to be able to exit game with current streak
         char lower = (char)65; //lower bound (A) //rather than having to do all swaps
-        int difference = 65 + hand.getCapacity();
+        int difference = 65 + handSize;
         char upper = (char)difference; // upperbound (J)
         while(true){
             Scanner scan = new Scanner(System.in);
