@@ -1,21 +1,21 @@
 public interface HandInterface<T> {
 
-    public T deal();
+    T deal();
 
-    public void stash(T newCard);
+    void stash(T newCard);
 
-    public T peek();
+    T peek();
 
-    public void fill(int handSize, Deck<Card> deck);  // THESE ARE NOT GENERIC TYPES ASK ADRIAN ABOUT THIS
+    void fill(int handSize, Deck<Card> deck);  // THESE ARE NOT GENERIC TYPES ASK ADRIAN ABOUT THIS
     /*
     This method will be used to fill the hand.
      */
 
-    public void display();
+    void display();
 
     //void fill(int handSize, Deck<Card> deck);
 
-    public void sort(int handSize);
+    void sort(int handSize);
 
-    public void clear();
+    void clear();
 }

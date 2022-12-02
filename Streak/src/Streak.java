@@ -26,9 +26,7 @@ public class Streak {
             }
             handSize = game.chooseHandSize();
             initialiseDeck();
-            System.out.println("Problem is hand");
             initialiseHand();
-
         }catch (EmptyStackException e){
             System.out.println("Failed to set up. Returning to menu.");
             Game.menu();
@@ -75,9 +73,15 @@ public class Streak {
     }
 
     private void mpStart(){
-        System.out.println("YAAAY multiplayer starting!");
+        System.out.println("YAY multiplayer starting!");
         System.out.println("Player One " + playerOne.getPlayerName());
         System.out.println("Player One " + playerTwo.getPlayerName());
+
+        //player one plays their 3 hands
+        playerOne.setPlayerScore(4); //whatever their highest streak is, set playerscoer
+
+
+        playerTwo.setPlayerScore(5);
     }
 
     public int getHandSize() {

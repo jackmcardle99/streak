@@ -10,6 +10,7 @@ public class Game {
 
     This class acts as the main game logic class, the "house" aka dealer.
      */
+
     static String[] scoreboard;
     public static void main(String[] args){
         menu();
@@ -31,7 +32,7 @@ public class Game {
             case "1" -> sp.play(true); // pass true for singleplayer, false for two player
             case "2" -> sp.play(false);
             case "3" -> rules();
-            case "4" -> System.out.println("Need to make leaderboard");
+            case "4" -> printScoreboard();
             case "5" -> System.out.println("Thanks for playing!");
         }
     }
@@ -130,5 +131,24 @@ public class Game {
 
     private static void rules(){
         System.out.println("Rules will be here.");
+    }
+
+    private static void printScoreboard(){
+        /*
+         possibly an array, that holds 5 players, each with the top score, if someone gets a high score, then
+         it checks the array to see if replaces someone in the array. Then that player gets assigned as the index of the
+         table below in order
+
+         */
+        Player playerTest = new Player("jack",5);
+        Player playerTest2 = new Player("lee",4);
+        String[][] table = new String[6][2];
+        table[0] = new String[]{"PLAYER ","SCORE "};
+        table[1] = new String[]{playerTest.getPlayerName(), String.valueOf(playerTest.getPlayerScore())};
+        table[2] = new String[]{playerTest2.getPlayerName(), String.valueOf(playerTest2.getPlayerScore())};
+        for (final Object[] row : table) {
+            System.out.format("%-30s%-30s%n", row);
+
+        }
     }
 }
