@@ -26,8 +26,7 @@ public class Replay<T> implements ReplayInterface<T>{
             T valueToReturn = front.getData();
             front = front.getNext();
             if(isEmpty()) rear = null;
-            numberOfEntries--;
-            return front.getData();
+            return valueToReturn;
         }
 
     }

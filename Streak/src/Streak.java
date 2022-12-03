@@ -1,15 +1,20 @@
 import java.util.EmptyStackException;
+import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
 public class Streak {
+    /*
+    This class is the game logic class, it provides methods that define behaviours to control the flow of the game.
+     */
 
-    private final Game game = new Game();
+    private final Menu menu = new Menu();
     private Player playerOne, playerTwo;
     private final Deck<Card> deck = new Deck<>();
     private final Hand<Card> hand = new Hand<>();
-    private final Replay<Hand<Card>> replay = new Replay<>();
-    private int handSize;
+    private final Replay<Hand<Card>> replay = new Replay<>(); // replay queue for holding hands
+    private final Replay<Card> swapReplay = new Replay<>(); // replay queue for holding swapped cards
+    private int handSize; // instance variable used for determining size of each played hand
 
     public Streak(){}
 
@@ -22,16 +27,16 @@ public class Streak {
     private void setUp(boolean singleplayer){
         try {
             System.out.println("PLAYER ONE:");
-            playerOne = game.createPlayer();
+            playerOne = menu.createPlayer();
             if(!singleplayer){
                 System.out.println("PLAYER TWO:");
-                playerTwo = game.createPlayer();
+                playerTwo = menu.createPlayer();
             }
-            handSize = game.chooseHandSize();
+            handSize = chooseHandSize();
             initialiseDeck();
         }catch (EmptyStackException e){
             System.out.println("\nFailed to set up. Returning to menu.");
-            Game.menu();
+            Menu.menu();
         }
     }
 
@@ -47,13 +52,13 @@ public class Streak {
     }
 
     private void playHand(Player player, boolean replay){
-        int maxStreak = game.calculateStreak(hand, handSize);
+        int maxStreak = calculateStreak();
         try{
             int swaps = handSize; // amount of rounds is equal to hand size
             printUI(player);
             boolean cont;
             while(swaps > 0){
-                cont = game.swapCard(hand, deck, swaps, handSize); // if false returned, round ends
+                cont = swapCard(hand, deck, swaps, handSize); // if false returned, round ends
                 if(!cont){
                     if(maxStreak > player.getPlayerScore()) player.setPlayerScore(maxStreak);
                     break;
@@ -66,23 +71,23 @@ public class Streak {
             }
         }catch (EmptyStackException e){
             System.out.println("\nError occurred. Returning to menu.");
-            Game.menu();
+            Menu.menu();
         }
     }
 
     private void spStart(){
         initialiseHand();
-        createReplay(); // creates copy of original hand
+        createReplay();
         playHand(playerOne, true);
         if(viewReplay()) printReplay();
     }
 
     private void createReplay(){
-          Card[] replayArr = hand.toArray(handSize); // Current hand copied to array
-          hand.arrToStack(replayArr); // hand array must be put back into hand stack
-          Hand<Card> replayHand = new Hand<>(); // creating a new stack as copy
-          replayHand.arrToStack(replayArr);
-          replay.enqueue(replayHand); // enqueuing each hand as they're played into the replay queue
+        Card[] replayArr = hand.toArray(handSize); // Current hand copied to array
+        hand.arrToStack(replayArr); // hand array must be put back into hand stack
+        Hand<Card> replayHand = new Hand<>(); // creating a new stack as copy
+        replayHand.arrToStack(replayArr);
+        replay.enqueue(replayHand); // enqueuing each hand as they're played into the replay queue
     }
 
     private boolean viewReplay(){
@@ -96,30 +101,18 @@ public class Streak {
         Scanner scan = new Scanner(System.in);
         int count = 0;
         try {
-            while (count != handSize) {
+            while (!replay.isEmpty()) {
                 count++;
                 System.out.println(playerOne.getPlayerName() + " Round " + count);
                 replay.dequeue().display();
+                System.out.println("\n\n Selection was " + swapReplay.dequeue().toString());
                 System.out.println("\n(Any button to continue...) >");
-                String input = scan.nextLine();
+                scan.nextLine();
             }
         }catch (NullPointerException ex){
             System.out.println("\n\nReplay done!\n\n");
         }
-
-//        int count = 0;
-//        while(!replay.isEmpty()){
-//            count++;
-//            System.out.println("HAND NO." + count);
-//            replay.getFront().display();
-//            replay.dequeue();
-//            if(replay.isEmpty()) break;
-//        }
-
-    }
-
-
-
+            }
 
     private void mpStart(){
         if(playerOneStarts()){
@@ -161,9 +154,94 @@ public class Streak {
     }
 
     private void printUI(Player player){
-        int maxStreak = game.calculateStreak(hand, handSize);
+        int maxStreak = calculateStreak();
         System.out.println("Player  : " + player.getPlayerName() + "\n");
         hand.display();
         System.out.println("\nMax streak  :  " + maxStreak);
+    }
+
+    private boolean swapCard(Hand<Card> hand, Deck<Card> deck, int swapsLeft, int handSize){ // player needs to be able to exit game with current streak
+        char lower = (char)65; //lower bound (A) //rather than having to do all swaps
+        int difference = 65 + handSize;
+        char upper = (char)difference; // upperbound (J)
+        while(true){
+            Scanner scan = new Scanner(System.in);
+            char userChar;
+            System.out.println("\nIf you'd like to swap a card, enter the equivalent letter. " +
+                    "Otherwise press T to exit and save your streak. You have " + swapsLeft + " swaps left >");
+            userChar = scan.next().charAt(0);
+            if(userChar == 'T' || userChar == 't'){
+                return false; //
+            }
+            if(userChar < lower || userChar > upper){
+                System.out.println("Please enter valid letter.");
+            }
+            else {
+                Card[] arr = hand.toArray(handSize);
+                swapReplay.enqueue(arr[userChar-65]); // adding swapped card to replay
+                arr[userChar-65] = deck.deal();
+                hand.arrToStack(arr);
+                return true;
+            }
+        }
+    }
+
+    private int calculateStreak(){
+        int maxStreak = 1, streak = 1, bonusStreak = 1, bonus = 0;
+        Card[] arr = hand.toArray(handSize);
+        Card card1 = arr[0], card2;
+        boolean suitBonusActive = false, colourBonusActive = false;
+        for(int i = 1; i < handSize; i++) {
+            card2 = arr[i];
+            suitBonusActive = card1.getSuit().equals(card2.getSuit()); //true if suits are same
+            colourBonusActive = card1.getColour().equals(card2.getColour()); //true if compared cards are same colour
+
+            ///////////////////// THIS DECISION STRUCTURE APPLIES IF CARD2 IS + 1 TO CARD1 ////////////////////////
+            if (card1.compareTo(card2) < 0) {
+                streak++; // add one to streak
+                if (suitBonusActive){ // if the compared cards are streaked AND they are the same suit
+                    bonusStreak++; // create new streak counter and increment
+                    colourBonusActive = false; // if card are same suit, then colour bonus is irrelevant
+                    bonus = 2;
+                }
+                if (colourBonusActive){ // if the compared cards are streaked AND the same colour
+                    bonusStreak++;
+                    bonus = 1;
+                }
+            }
+            ///////////////////////////////////////////////////////////////////////////////////////////////////////
+            ///////////////////// THIS DECISION STRUCTURE APPLIES IF CARDS ARE NOT STREAKED ////////////////////////
+            if (card1.compareTo(card2) > 0) {
+                streak = 1; // reset streak values
+                bonusStreak = 1;
+            }
+            //////////////////////////////////////////////////////////////////////////////////////////////////////
+            // Determine which type of streak is greater, then update max streak with new value
+            if((bonusStreak+bonus) > maxStreak || streak > maxStreak){
+                maxStreak = Math.max((bonusStreak+bonus), streak);
+            }
+            card1 = card2; // update next set of cards to be compared
+        }
+        hand.arrToStack(arr);
+        return maxStreak;
+    }
+
+    private int chooseHandSize(){
+        Hand<Card> HAND = new Hand<>(); //for fetching hand size
+        int handSize = 0;
+        while(true){
+            Scanner scan = new Scanner(System.in);
+            try {
+                System.out.println("Please choose the size of the hand being played. (Between 5-10 cards) > ");
+                handSize = scan.nextInt();
+                if(handSize < HAND.getDefaultCapacity() || handSize > HAND.getMaxCapacity()){ // hand size range based
+                    System.out.println("Please ensure hand is between 5-10 cards in size.");  // on default and max cap
+                }
+                else break;
+            }catch (InputMismatchException ex){
+                System.out.println("Please enter valid input.");
+            }
+        }
+        return handSize;
     }
 }

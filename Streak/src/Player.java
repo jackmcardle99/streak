@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class Player implements Comparable<Player> {
 
     private final String playerName;
@@ -6,6 +8,10 @@ public class Player implements Comparable<Player> {
     public Player(String playerName, int playerScore){
         this.playerName = playerName;
         this.playerScore = playerScore;
+    }
+
+    public String toString(){
+        return playerName + "   :    " + playerScore;
     }
 
     public int getPlayerScore() {
