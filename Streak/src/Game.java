@@ -17,7 +17,7 @@ public class Game {
     }
 
     public static void menu(){
-        Streak sp = new Streak();
+        Streak strk = new Streak();
             while(true){
                 Scanner scan = new Scanner(System.in);
                 System.out.println("""
@@ -30,8 +30,8 @@ public class Game {
                     (5) Exit""");
                 String userInput = scan.nextLine();
                 switch (userInput) {
-                    case "1" -> sp.play(true); // pass true for singleplayer, false for two player
-                    case "2" -> sp.play(false);
+                    case "1" -> strk.play(true); // pass true for singleplayer, false for two player
+                    case "2" -> strk.play(false);
                     case "3" -> rules();
                     case "4" -> printScoreboard();
                     case "5" -> {
@@ -127,7 +127,13 @@ public class Game {
             else {
                 Card[] arr = hand.toArray(handSize);
                 //arr[cardToSwap] = replay.stash(); // FOR REPLAY deck LATER
+//                Replay<Card> swappedCards = new Replay<>();
+//                Streak stk = new Streak();
+//                Card swappedCard = arr[userChar-65];
+//                stk.setReplay(swappedCard);
+                Card swapCopy = arr[userChar-65];
                 arr[userChar-65] = deck.deal();
+
                 hand.arrToStack(arr);
                 return true;
             }

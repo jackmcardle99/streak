@@ -29,9 +29,9 @@ public class Hand<T> implements HandInterface<T>{
     }
 
     @Override
-    public void fill(int handSize, Deck<Card> deck){
+    public void fill(int handSize, Deck<T> deck){
         for(int i = 0; i < handSize; i++){
-            stash((T) deck.deal());
+            stash(deck.deal());
         }
     }
 
@@ -80,6 +80,7 @@ public class Hand<T> implements HandInterface<T>{
             c++; // increment char ascii value by 1 each time A,B,C,D,E... etc
             current = current.getNext();
         }
+//        return false; // not exactly sure why I need to return false here - line 86 in streak class is the cause
     } // add empty stakc exception
 
     public int getCapacity(){

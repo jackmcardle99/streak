@@ -76,4 +76,8 @@ public class Deck<T> implements DeckInterface<T>{
     public int getCapacity(){
         return numberOfCards;
     }
+
+    public Deck<Card> getDeck(){
+        return (Deck<Card>) this;
+    }
    }
