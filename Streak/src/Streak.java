@@ -1,4 +1,5 @@
 import java.util.EmptyStackException;
+import java.util.Random;
 
 public class Streak {
 
@@ -26,7 +27,6 @@ public class Streak {
             }
             handSize = game.chooseHandSize();
             initialiseDeck();
-            initialiseHand();
         }catch (EmptyStackException e){
             System.out.println("Failed to set up. Returning to menu.");
             Game.menu();
@@ -44,45 +44,80 @@ public class Streak {
         hand.sort(handSize);
     }
 
-    private void spStart(){ // THIS METHOD COULD POTENTIALLY RETURN PLAYER OBJECT TO ADD TO SCOREBOARD
+    private void playHand(Player player){
         int maxStreak = game.calculateStreak(hand, handSize);
         try{
             int swaps = handSize; // amount of rounds is equal to hand size
-            System.out.println("Player  : " + playerOne.getPlayerName() );
-            hand.display();
-            System.out.println("\nMax streak  :  " + maxStreak);
+            printUI(player);
             boolean cont = true;
             while(swaps > 0){
                 cont = game.swapCard(hand, deck, swaps, handSize); // if false returned, round ends
-                if(!cont) break;
+                if(!cont){
+                    if(maxStreak > player.getPlayerScore()) player.setPlayerScore(maxStreak);
+                    break;
+                }
                 swaps--;
                 hand.sort(handSize);
-                maxStreak = game.calculateStreak(hand, handSize);
-                System.out.println("Player  : " + playerOne.getPlayerName() );
-                System.out.println("\nMax streak  :  " + maxStreak);
-                hand.display();
+                printUI(player);
+                if(maxStreak > player.getPlayerScore()) player.setPlayerScore(maxStreak);
             }
-            // SAVE THE SCORE TO SCOREBOARD FROM HERE IF IT IS ABOVE CURRENT PLAYERS
-            System.out.println("Your max streak was   :   " + maxStreak + ". Returning to menu...");
-            playerOne.setPlayerScore(maxStreak);
-            Game.menu();
         }catch (EmptyStackException e){
             System.out.println("Error occurred. Returning to menu.");
             Game.menu();
         }
     }
 
-    private void mpStart(){
-        System.out.println("YAY multiplayer starting!");
-        System.out.println("Player One " + playerOne.getPlayerName());
-        System.out.println("Player One " + playerTwo.getPlayerName());
-
-        //player one plays their 3 hands
-        playerOne.setPlayerScore(4); //whatever their highest streak is, set playerscoer
-
-
-        playerTwo.setPlayerScore(5);
+    private void spStart(){
+        initialiseHand();
+        playHand(playerOne);
     }
+
+    private void mpStart(){
+        if(playerOneStarts()){
+            playThreeRounds(playerOne);
+            initialiseDeck();
+            playThreeRounds(playerTwo);
+        }else{
+            playThreeRounds(playerTwo);
+            initialiseDeck();
+            playThreeRounds(playerOne);
+        }
+
+        if(playerOne.compareTo(playerTwo) > 0) System.out.println(playerOne.getPlayerName() + " WINS!");
+        else if(playerOne.compareTo(playerTwo) < 0) System.out.println(playerTwo.getPlayerName() + " WINS!");
+        else System.out.println("It's a DRAW!");
+
+    }
+
+    private void playThreeRounds(Player player){
+        for(int i = 0; i < 3; i++){
+            System.out.println("Round " + (i+1) + " of 3");
+            initialiseHand();
+            playHand(player);
+        }
+        System.out.println(player.getPlayerName() + " obtained high score of " + player.getPlayerScore());
+    }
+
+    private boolean playerOneStarts(){
+        Random ran = new Random();
+        int result = ran.nextInt(1,3);
+        if(result==1){
+            System.out.println(playerOne.getPlayerName() + " starts!");
+            return true;
+        }
+        else{
+            System.out.println(playerTwo.getPlayerName() + " starts!");
+            return false;
+        }
+    }
+
+    private void printUI(Player player){
+        int maxStreak = game.calculateStreak(hand, handSize);
+        System.out.println("Player  : " + player.getPlayerName() );
+        hand.display();
+        System.out.println("\nMax streak  :  " + maxStreak);
+    }
+
 
     public int getHandSize() {
         return handSize;

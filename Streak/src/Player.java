@@ -1,4 +1,4 @@
-public class Player {
+public class Player implements Comparable<Player> {
 
     private final String playerName;
     private int playerScore;
@@ -18,5 +18,9 @@ public class Player {
 
     public void setPlayerScore(int playerScore) {
         this.playerScore = playerScore;
+    }
+
+    public int compareTo(Player otherPlayer) {
+        return Integer.compare(playerScore, otherPlayer.playerScore);
     }
 }

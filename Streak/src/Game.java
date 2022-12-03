@@ -18,23 +18,28 @@ public class Game {
 
     public static void menu(){
         Streak sp = new Streak();
-        Scanner scan = new Scanner(System.in);
-        System.out.println("""
-                Welcome to Streak! 
-                Please choose from the options available
-                (1) Single player
-                (2) Two player
-                (3) Rules
-                (4) Score table
-                (4) Exit""");
-        String userInput = scan.nextLine();
-        switch (userInput) {
-            case "1" -> sp.play(true); // pass true for singleplayer, false for two player
-            case "2" -> sp.play(false);
-            case "3" -> rules();
-            case "4" -> printScoreboard();
-            case "5" -> System.out.println("Thanks for playing!");
-        }
+            while(true){
+                Scanner scan = new Scanner(System.in);
+                System.out.println("""
+                    Welcome to Streak!
+                    Please choose from the options available
+                    (1) Single player
+                    (2) Two player
+                    (3) Rules
+                    (4) Score table
+                    (5) Exit""");
+                String userInput = scan.nextLine();
+                switch (userInput) {
+                    case "1" -> sp.play(true); // pass true for singleplayer, false for two player
+                    case "2" -> sp.play(false);
+                    case "3" -> rules();
+                    case "4" -> printScoreboard();
+                    case "5" -> {
+                        System.out.println("Thanks for playing!");
+                        System.exit(0);
+                    }
+                }
+            }
     }
 
     public Player createPlayer (){
