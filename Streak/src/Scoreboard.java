@@ -1,7 +1,10 @@
 public class Scoreboard<T extends Comparable<T>> implements QueueInterface<T>{
 
     private MyNode<T> front;
-    private final int MAX_SIZE = 5;
+    private final int MAX_SIZE = 5; /*
+     am I able to restrict the size of the priority queue to 5? although what would be the point in creating a
+     linked-list implementation if size is restricted to 5.
+     */
     private int numberOfEntries = 0;
 
     public Scoreboard(){

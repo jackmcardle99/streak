@@ -11,7 +11,7 @@ public class Menu {
     game logic is defined here.
      */
 
-    private static final Scoreboard<Player> scoretable = new Scoreboard<>();
+    private static final Scoreboard<Player> scoreTable = new Scoreboard<>();
 
     public static void main(String[] args){
         menu();
@@ -48,27 +48,27 @@ public class Menu {
     }
 
     public static void printScoreboard(){
-        if(scoretable.isEmpty()){
+        if(scoreTable.isEmpty()){
             System.out.println("No high scores yet!");
             menu();
         }
-
-
-        String[][] table = new String[6][2];
-        table[0] = new String[]{"PLAYER ", "SCORE "};
-        for(int i = 1; i < 5; i++){
-            if(scoretable.getFront()==null) break;
-            table[i] = new String[]{scoretable.getFront().getPlayerName(), String.valueOf(scoretable.getFront().getPlayerScore())};
-            scoretable.dequeue();
+        int size = scoreTable.getNumberOfEntries();  // I NEED TO ENQUEUE THE PLAYER OBJECTS AFTER DISPLAYING TABLE!!!!!!
+        //Player[] temp = new Player[]
+        String[][] table = new String[size][2];     // SO THAT THE PRIORITYQUEUE WILL RE-POPULATE
+        for(int i = 0; i < size; i++){
+            if(scoreTable.getFront()==null) break;
+            table[i] = new String[]{scoreTable.getFront().getPlayerName(), String.valueOf(scoreTable.getFront().getPlayerScore())};
+            scoreTable.dequeue();
         }
-
+        System.out.println("PLAYER                        SCORE");
+        System.out.println("-----------------------------------");
         for (final Object[] row : table) {
             System.out.format("%-30s%-30s%n", row);
         }
     }
 
     public void addToTable(Player playerToAdd){
-        scoretable.enqueue(playerToAdd);
+        scoreTable.enqueue(playerToAdd);
     }
 
     public Player createPlayer (){
