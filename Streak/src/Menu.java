@@ -1,4 +1,3 @@
-import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Menu {
@@ -11,6 +10,8 @@ public class Menu {
     This class is the main class of the application, and acts as a menu for accessing different parts of the game. No
     game logic is defined here.
      */
+
+    private static final Scoreboard<Player> scoretable = new Scoreboard<>();
 
     public static void main(String[] args){
         menu();
@@ -46,23 +47,28 @@ public class Menu {
         System.out.println("Rules will be here.");
     }
 
-    private static void printScoreboard(){
-        /*
-         possibly an array, that holds 5 players, each with the top score, if someone gets a high score, then
-         it checks the array to see if replaces someone in the array. Then that player gets assigned as the index of the
-         table below in order
+    public static void printScoreboard(){
+        if(scoretable.isEmpty()){
+            System.out.println("No high scores yet!");
+            menu();
+        }
 
-         */
-        Player playerTest = new Player("jack",5);
-        Player playerTest2 = new Player("lee",4);
+
         String[][] table = new String[6][2];
-        table[0] = new String[]{"PLAYER ","SCORE "};
-        table[1] = new String[]{playerTest.getPlayerName(), String.valueOf(playerTest.getPlayerScore())};
-        table[2] = new String[]{playerTest2.getPlayerName(), String.valueOf(playerTest2.getPlayerScore())};
+        table[0] = new String[]{"PLAYER ", "SCORE "};
+        for(int i = 1; i < 5; i++){
+            if(scoretable.getFront()==null) break;
+            table[i] = new String[]{scoretable.getFront().getPlayerName(), String.valueOf(scoretable.getFront().getPlayerScore())};
+            scoretable.dequeue();
+        }
+
         for (final Object[] row : table) {
             System.out.format("%-30s%-30s%n", row);
-
         }
+    }
+
+    public void addToTable(Player playerToAdd){
+        scoretable.enqueue(playerToAdd);
     }
 
     public Player createPlayer (){

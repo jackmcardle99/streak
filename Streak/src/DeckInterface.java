@@ -3,8 +3,11 @@ public interface DeckInterface<T> {
     This interface contains behaviours for manipulating the stack.
     - pop (deal)
     - push (stash)
+    - peek
     - shuffle deck
-    - count cards
+    - clear deck
+    - fill deck
+
     look into other needed methods
      */
 

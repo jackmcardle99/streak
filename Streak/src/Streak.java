@@ -51,7 +51,7 @@ public class Streak {
         hand.sort(handSize);
     }
 
-    private void playHand(Player player, boolean replay){
+    private void playHand(Player player){
         int maxStreak = calculateStreak();
         try{
             int swaps = handSize; // amount of rounds is equal to hand size
@@ -78,8 +78,9 @@ public class Streak {
     private void spStart(){
         initialiseHand();
         createReplay();
-        playHand(playerOne, true);
+        playHand(playerOne);
         if(viewReplay()) printReplay();
+        menu.addToTable(playerOne);
     }
 
     private void createReplay(){
@@ -112,7 +113,7 @@ public class Streak {
         }catch (NullPointerException ex){
             System.out.println("\n\nReplay done!\n\n");
         }
-            }
+    }
 
     private void mpStart(){
         if(playerOneStarts()){
@@ -128,14 +129,15 @@ public class Streak {
         if(playerOne.compareTo(playerTwo) > 0) System.out.println(playerOne.getPlayerName() + " WINS!");
         else if(playerOne.compareTo(playerTwo) < 0) System.out.println(playerTwo.getPlayerName() + " WINS!");
         else System.out.println("It's a DRAW!");
-
+        menu.addToTable(playerOne);
+        menu.addToTable(playerTwo);
     }
 
     private void playThreeRounds(Player player){
         for(int i = 0; i < 3; i++){
             System.out.println("Round " + (i+1) + " of 3");
             initialiseHand();
-            playHand(player, false);
+            playHand(player);
         }
         System.out.println(player.getPlayerName() + " obtained high score of " + player.getPlayerScore());
     }
@@ -190,7 +192,7 @@ public class Streak {
         int maxStreak = 1, streak = 1, bonusStreak = 1, bonus = 0;
         Card[] arr = hand.toArray(handSize);
         Card card1 = arr[0], card2;
-        boolean suitBonusActive = false, colourBonusActive = false;
+        boolean suitBonusActive, colourBonusActive;
         for(int i = 1; i < handSize; i++) {
             card2 = arr[i];
             suitBonusActive = card1.getSuit().equals(card2.getSuit()); //true if suits are same
@@ -228,7 +230,7 @@ public class Streak {
 
     private int chooseHandSize(){
         Hand<Card> HAND = new Hand<>(); //for fetching hand size
-        int handSize = 0;
+        int handSize;
         while(true){
             Scanner scan = new Scanner(System.in);
             try {
