@@ -53,12 +53,15 @@ public class Menu {
             menu();
         }
         int size = scoreTable.getNumberOfEntries();  // I NEED TO ENQUEUE THE PLAYER OBJECTS AFTER DISPLAYING TABLE!!!!!!
-        //Player[] temp = new Player[]
+        Player[] temp = new Player[size];
         String[][] table = new String[size][2];     // SO THAT THE PRIORITYQUEUE WILL RE-POPULATE
         for(int i = 0; i < size; i++){
             if(scoreTable.getFront()==null) break;
             table[i] = new String[]{scoreTable.getFront().getPlayerName(), String.valueOf(scoreTable.getFront().getPlayerScore())};
-            scoreTable.dequeue();
+            temp[i] = scoreTable.dequeue();
+        }
+        for(int i = 0; i < size; i++){
+            scoreTable.enqueue(temp[i]);
         }
         System.out.println("PLAYER                        SCORE");
         System.out.println("-----------------------------------");
@@ -67,7 +70,7 @@ public class Menu {
         }
     }
 
-    public void addToTable(Player playerToAdd){
+    public void addToScoreboard(Player playerToAdd){
         scoreTable.enqueue(playerToAdd);
     }
 

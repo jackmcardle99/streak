@@ -60,6 +60,22 @@ public class Scoreboard<T extends Comparable<T>> implements QueueInterface<T>{
         numberOfEntries = 0;
     }
 
+    public Player[] toArray(Scoreboard<T> scoreTable){
+        int size = getNumberOfEntries();
+        Player[] temp = new Player[size];
+        for(int i = 0; i < size; i++){
+            temp[i] = (Player) dequeue();
+        }
+        return temp;
+    }
+
+    public void arrToQueue(Player[] arr){
+        int size = arr.length;
+        for (Player player : arr) {
+            enqueue((T) player);
+        }
+    }
+
     public int getNumberOfEntries(){
         return numberOfEntries;
     }

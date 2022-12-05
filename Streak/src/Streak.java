@@ -80,7 +80,7 @@ public class Streak {
         createReplay();
         playHand(playerOne);
         if(viewReplay()) printReplay();
-        menu.addToTable(playerOne);
+        menu.addToScoreboard(playerOne);
     }
 
     private void createReplay(){
@@ -129,8 +129,8 @@ public class Streak {
         if(playerOne.compareTo(playerTwo) > 0) System.out.println(playerOne.getPlayerName() + " WINS!");
         else if(playerOne.compareTo(playerTwo) < 0) System.out.println(playerTwo.getPlayerName() + " WINS!");
         else System.out.println("It's a DRAW!");
-        menu.addToTable(playerOne);
-        menu.addToTable(playerTwo);
+        menu.addToScoreboard(playerOne);
+        menu.addToScoreboard(playerTwo);
     }
 
     private void playThreeRounds(Player player){
