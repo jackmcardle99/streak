@@ -1,10 +1,8 @@
 public class Scoreboard<T extends Comparable<T>> implements QueueInterface<T>{
 
+    // REMOVE EXTENDS COMPARABLE ABOVE
     private MyNode<T> front;
-    private final int MAX_SIZE = 5; /*
-     am I able to restrict the size of the priority queue to 5? although what would be the point in creating a
-     linked-list implementation if size is restricted to 5.
-     */
+
     private int numberOfEntries = 0;
 
     public Scoreboard(){
@@ -13,23 +11,21 @@ public class Scoreboard<T extends Comparable<T>> implements QueueInterface<T>{
 
     @Override
     public void enqueue(T newEntry) {
-        //while(numberOfEntries<=MAX_SIZE){
-            MyNode<T> newNode = new MyNode<>(newEntry);
-            if(isEmpty()) front = newNode;
-            else if (front.getData().compareTo(newEntry)  < 0){
-                newNode.setNext(front);
-                front = newNode;
+        MyNode<T> newNode = new MyNode<>(newEntry);
+        if(isEmpty()) front = newNode;
+        else if (front.getData().compareTo(newEntry)  < 0){
+            newNode.setNext(front);
+            front = newNode;
+        }
+        else {
+            MyNode<T> currentNode = front;
+            while(currentNode.getNext() != null && currentNode.getNext().getData().compareTo(newEntry) > 0){
+                currentNode = currentNode.getNext();
             }
-            else {
-                MyNode<T> currentNode = front;
-                while(currentNode.getNext() != null && currentNode.getNext().getData().compareTo(newEntry) > 0){
-                    currentNode = currentNode.getNext();
-                }
-                newNode.setNext(currentNode.getNext());
-                currentNode.setNext(newNode);
-            }
-            numberOfEntries++;
-        //}
+            newNode.setNext(currentNode.getNext());
+            currentNode.setNext(newNode);
+        }
+        numberOfEntries++;
     }
 
     @Override
@@ -58,22 +54,6 @@ public class Scoreboard<T extends Comparable<T>> implements QueueInterface<T>{
     public void clear() {
         front = null;
         numberOfEntries = 0;
-    }
-
-    public Player[] toArray(Scoreboard<T> scoreTable){
-        int size = getNumberOfEntries();
-        Player[] temp = new Player[size];
-        for(int i = 0; i < size; i++){
-            temp[i] = (Player) dequeue();
-        }
-        return temp;
-    }
-
-    public void arrToQueue(Player[] arr){
-        int size = arr.length;
-        for (Player player : arr) {
-            enqueue((T) player);
-        }
     }
 
     public int getNumberOfEntries(){

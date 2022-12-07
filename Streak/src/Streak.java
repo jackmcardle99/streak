@@ -51,7 +51,7 @@ public class Streak {
         hand.sort(handSize);
     }
 
-    private void playHand(Player player){
+    private int playHand(Player player){
         int maxStreak = calculateStreak();
         try{
             int swaps = handSize; // amount of rounds is equal to hand size
@@ -73,6 +73,7 @@ public class Streak {
             System.out.println("\nError occurred. Returning to menu.");
             Menu.menu();
         }
+        return  maxStreak;
     }
 
     private void spStart(){
@@ -81,6 +82,7 @@ public class Streak {
         playHand(playerOne);
         if(viewReplay()) printReplay();
         menu.addToScoreboard(playerOne);
+        replay.clear(); // need to clear replay at the end
     }
 
     private void createReplay(){
@@ -116,30 +118,32 @@ public class Streak {
     }
 
     private void mpStart(){
+        int playerOneCumulative, playerTwoCumulative;
         if(playerOneStarts()){
-            playThreeRounds(playerOne);
+            playerOneCumulative = playThreeRounds(playerOne);
             initialiseDeck();
-            playThreeRounds(playerTwo);
+            playerTwoCumulative = playThreeRounds(playerTwo);
         }else{
-            playThreeRounds(playerTwo);
+            playerTwoCumulative = playThreeRounds(playerTwo);
             initialiseDeck();
-            playThreeRounds(playerOne);
+            playerOneCumulative = playThreeRounds(playerOne);
         }
-
-        if(playerOne.compareTo(playerTwo) > 0) System.out.println(playerOne.getPlayerName() + " WINS!");
-        else if(playerOne.compareTo(playerTwo) < 0) System.out.println(playerTwo.getPlayerName() + " WINS!");
-        else System.out.println("It's a DRAW!");
+        if(playerOneCumulative > playerTwoCumulative) System.out.println("\n" + playerOne.getPlayerName() + " WINS!");
+        if(playerTwoCumulative > playerOneCumulative) System.out.println("\n" + playerTwo.getPlayerName() + " WINS!");
+        else System.out.println("\nIT'S A DRAW!\n");
         menu.addToScoreboard(playerOne);
         menu.addToScoreboard(playerTwo);
     }
 
-    private void playThreeRounds(Player player){
+    private int playThreeRounds(Player player){
+        int combinedScore = 0;
         for(int i = 0; i < 3; i++){
             System.out.println("Round " + (i+1) + " of 3");
             initialiseHand();
-            playHand(player);
+            combinedScore = combinedScore + playHand(player);
         }
-        System.out.println(player.getPlayerName() + " obtained high score of " + player.getPlayerScore());
+        System.out.println(player.getPlayerName() + " obtained total score of " + combinedScore);
+        return combinedScore;
     }
 
     private boolean playerOneStarts(){ // this method is used to randomise who starts during two player game
@@ -156,10 +160,12 @@ public class Streak {
     }
 
     private void printUI(Player player){
-        int maxStreak = calculateStreak();
+        int streak = calculateStreak();
+        System.out.println("<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>");
         System.out.println("Player  : " + player.getPlayerName() + "\n");
         hand.display();
-        System.out.println("\nMax streak  :  " + maxStreak);
+        System.out.println("\nMax streak  :  " + streak);
+        System.out.println("<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>");
     }
 
     private boolean swapCard(Hand<Card> hand, Deck<Card> deck, int swapsLeft, int handSize){ // player needs to be able to exit game with current streak
@@ -227,6 +233,7 @@ public class Streak {
         hand.arrToStack(arr);
         return maxStreak;
     }
+
 
     private int chooseHandSize(){
         Hand<Card> HAND = new Hand<>(); //for fetching hand size

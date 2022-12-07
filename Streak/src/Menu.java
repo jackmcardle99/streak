@@ -22,13 +22,14 @@ public class Menu {
             while(true){
                 Scanner scan = new Scanner(System.in);
                 System.out.println("""
-                    Welcome to Streak!
-                    Please choose from the options available
+                    <><><><><><><><><><><>< STREAK ><><><><><><><><><><><><><><><>
                     (1) Single player
                     (2) Two player
                     (3) Rules
                     (4) Score table
-                    (5) Exit""");
+                    (5) Exit
+                    <><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>
+                    """);
                 String userInput = scan.nextLine();
                 switch (userInput) {
                     case "1" -> streak.play(true); // pass true for singleplayer, false for two player
@@ -45,29 +46,32 @@ public class Menu {
 
     private static void rules(){
         System.out.println("Rules will be here.");
+        System.out.println("Streak is a card game for up to 2 players in which players aim to score the highest" +
+                "streak possible from the cards dealt into their hand.");
     }
 
     public static void printScoreboard(){
         if(scoreTable.isEmpty()){
-            System.out.println("No high scores yet!");
+            System.out.println("\nNo high scores yet!\n");
             menu();
         }
-        int size = scoreTable.getNumberOfEntries();  // I NEED TO ENQUEUE THE PLAYER OBJECTS AFTER DISPLAYING TABLE!!!!!!
+        int size = scoreTable.getNumberOfEntries();
         Player[] temp = new Player[size];
-        String[][] table = new String[size][2];     // SO THAT THE PRIORITYQUEUE WILL RE-POPULATE
+        String[][] table = new String[size][2];
         for(int i = 0; i < size; i++){
             if(scoreTable.getFront()==null) break;
             table[i] = new String[]{scoreTable.getFront().getPlayerName(), String.valueOf(scoreTable.getFront().getPlayerScore())};
             temp[i] = scoreTable.dequeue();
         }
         for(int i = 0; i < size; i++){
-            scoreTable.enqueue(temp[i]);
+            scoreTable.enqueue(temp[i]); // after high-scores displayed, they must be put back into the queue data structure
         }
-        System.out.println("PLAYER                        SCORE");
+        System.out.println("\nPLAYER                        SCORE");
         System.out.println("-----------------------------------");
         for (final Object[] row : table) {
             System.out.format("%-30s%-30s%n", row);
         }
+        System.out.println("\n");
     }
 
     public void addToScoreboard(Player playerToAdd){
