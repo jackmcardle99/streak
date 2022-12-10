@@ -64,20 +64,8 @@ public class Deck<T> implements DeckInterface<T>{
             current = current.getNext();
         }
     } // add empty stack exception
-
-    public T[] toArray(Deck<T> deckToArray){
-        return null;
-    }
     @Override
     public void clear(){
         topNode = null;
-    }
-
-    public int getCapacity(){
-        return numberOfCards;
-    }
-
-    public Deck<Card> getDeck(){
-        return (Deck<Card>) this;
     }
    }

@@ -27,10 +27,10 @@ public class Streak {
     private void setUp(boolean singleplayer){
         try {
             System.out.println("PLAYER ONE:");
-            playerOne = menu.createPlayer();
+            playerOne = Player.createPlayer();
             if(!singleplayer){
                 System.out.println("PLAYER TWO:");
-                playerTwo = menu.createPlayer();
+                playerTwo = Player.createPlayer();
             }
             handSize = chooseHandSize();
             initialiseDeck();
@@ -52,12 +52,13 @@ public class Streak {
     }
 
     private int playHand(Player player){
-        int maxStreak = calculateStreak();
+        int maxStreak = 1;
         try{
             int swaps = handSize; // amount of rounds is equal to hand size
             printUI(player);
             boolean cont;
             while(swaps > 0){
+                maxStreak = calculateStreak();
                 cont = swapCard(hand, deck, swaps, handSize); // if false returned, round ends
                 if(!cont){
                     if(maxStreak > player.getPlayerScore()) player.setPlayerScore(maxStreak);
@@ -130,7 +131,7 @@ public class Streak {
         }
         if(playerOneCumulative > playerTwoCumulative) System.out.println("\n" + playerOne.getPlayerName() + " WINS!");
         if(playerTwoCumulative > playerOneCumulative) System.out.println("\n" + playerTwo.getPlayerName() + " WINS!");
-        else System.out.println("\nIT'S A DRAW!\n");
+        else if (playerOneCumulative == playerTwoCumulative) System.out.println("\nIT'S A DRAW!\n");
         menu.addToScoreboard(playerOne);
         menu.addToScoreboard(playerTwo);
     }
@@ -140,7 +141,7 @@ public class Streak {
         for(int i = 0; i < 3; i++){
             System.out.println("Round " + (i+1) + " of 3");
             initialiseHand();
-            combinedScore = combinedScore + playHand(player);
+            combinedScore += playHand(player); // assigning max streak to current score
         }
         System.out.println(player.getPlayerName() + " obtained total score of " + combinedScore);
         return combinedScore;
@@ -219,7 +220,7 @@ public class Streak {
             }
             ///////////////////////////////////////////////////////////////////////////////////////////////////////
             ///////////////////// THIS DECISION STRUCTURE APPLIES IF CARDS ARE NOT STREAKED ////////////////////////
-            if (card1.compareTo(card2) > 0) {
+            if (card1.compareTo(card2) > 0 || card1.compareTo(card2) == 0) {
                 streak = 1; // reset streak values
                 bonusStreak = 1;
             }

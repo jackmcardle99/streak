@@ -10,6 +10,12 @@ public class Player implements Comparable<Player> {
         this.playerScore = playerScore;
     }
 
+    public static Player createPlayer(){
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Please enter your name > ");
+        return new Player(scan.nextLine(), 0);
+    }
+
     public String toString(){
         return playerName + "   :    " + playerScore;
     }

@@ -7,12 +7,27 @@ public interface QueueInterface<T> {
      */
 
     void enqueue(T anEntry);
+    /*
+    This method will enqueue a new entry into the queue.
+     */
 
     T dequeue();
+    /*
+    This method will dequeue the front element from the queue.
+     */
 
     T getFront();
+    /*
+    This method will return the data from the front element of the queue.
+     */
 
     boolean isEmpty();
+    /*
+    This method will return a boolean on whether the queue is empty or not.
+     */
 
     void clear();
+    /*
+    This method will clear the queue of all elements.
+     */
 }

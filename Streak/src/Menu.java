@@ -45,12 +45,17 @@ public class Menu {
     }
 
     private static void rules(){
-        System.out.println("Rules will be here.");
-        System.out.println("Streak is a card game for up to 2 players in which players aim to score the highest" +
-                "streak possible from the cards dealt into their hand.");
+        System.out.println("RULES\n");
+        System.out.println("""
+                Streak is a card game for up to 2 players in which players aim to score the highest
+                streak possible from the cards dealt into their hand. The player can exchange cards as many times
+                3as the size of the hand. E.g. if a player has a hand of 5 cards, they can make 5 swaps.
+                
+                The aim is to create the highest streak possible. If streaked cards
+                """);
     }
 
-    public static void printScoreboard(){
+    public static void printScoreboard(){ //CLEAN THIS METHOD UP!!!!
         if(scoreTable.isEmpty()){
             System.out.println("\nNo high scores yet!\n");
             menu();
@@ -78,9 +83,5 @@ public class Menu {
         scoreTable.enqueue(playerToAdd);
     }
 
-    public Player createPlayer (){
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Please enter your name > ");
-        return new Player(scan.nextLine(), 0);
-    }
+
 }

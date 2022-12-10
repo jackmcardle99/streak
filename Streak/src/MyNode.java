@@ -23,4 +23,14 @@ public class MyNode<T> {
     public void setNext(MyNode<T> nextNode){
         next = nextNode;
     }
+
+    public static void main(String[] args){
+        MyNode<Integer> node1 = null;
+        node1.setData(1);
+        MyNode<Integer> node2 = new MyNode<>(2);
+        MyNode<Integer> node3 = new MyNode<>(3);
+        
+        
+        
+    }
 }
