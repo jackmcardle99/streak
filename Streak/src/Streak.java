@@ -129,10 +129,10 @@ public class Streak {
             initialiseDeck();
             playerOneCumulative = playThreeRounds(playerOne);
         }
-        if(playerOneCumulative > playerTwoCumulative) System.out.println("\n" + playerOne.getPlayerName() + " WINS!");
-        if(playerTwoCumulative > playerOneCumulative) System.out.println("\n" + playerTwo.getPlayerName() + " WINS!");
-        else if (playerOneCumulative == playerTwoCumulative) System.out.println("\nIT'S A DRAW!\n");
-        menu.addToScoreboard(playerOne);
+        if(playerOneCumulative > playerTwoCumulative) System.out.println("\n" + playerOne.getPlayerName() + " WINS!\n\n");
+        if(playerTwoCumulative > playerOneCumulative) System.out.println("\n" + playerTwo.getPlayerName() + " WINS!\n\n");
+        else if (playerOneCumulative == playerTwoCumulative) System.out.println("\nIT'S A DRAW!\n\n");
+        menu.addToScoreboard(playerOne); //adding players to scoreboard
         menu.addToScoreboard(playerTwo);
     }
 
@@ -165,7 +165,7 @@ public class Streak {
         System.out.println("<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>");
         System.out.println("Player  : " + player.getPlayerName() + "\n");
         hand.display();
-        System.out.println("\nMax streak  :  " + streak);
+        System.out.println("\nHighest streak  :  " + streak);
         System.out.println("<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>");
     }
 
@@ -180,7 +180,7 @@ public class Streak {
                     "Otherwise press T to exit and save your streak. You have " + swapsLeft + " swaps left >");
             userChar = scan.next().charAt(0);
             if(userChar == 'T' || userChar == 't'){
-                return false; //
+                return false;
             }
             if(userChar < lower || userChar > upper){
                 System.out.println("Please enter valid letter.");

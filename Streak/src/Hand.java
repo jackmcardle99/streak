@@ -35,12 +35,6 @@ public class Hand<T> implements HandInterface<T>{
         }
     }
 
-    private static void swap(Card[] arr, int first, int second){ // Swap method for quicksort
-        Card temp = arr[first];
-        arr[first] = arr[second];
-        arr[second] = temp;
-    }
-
     public Card[] toArray(int handSize){
         Card[] tempArr = new Card[handSize];
         for(int i = 0; i < handSize; i++){
@@ -48,21 +42,25 @@ public class Hand<T> implements HandInterface<T>{
         }
         return tempArr;
     }
-    public Card[] quickSort(Card[] tempArr, int first, int last){ //IMPLEMENTING QUICKSORT
-        int pivot = tempArr[last].getRankValue();
-        int indexFromLeft = first, indexFromRight = last;
-        while(indexFromLeft <= indexFromRight){
-            while(tempArr[indexFromLeft].getRankValue() < pivot) indexFromLeft++;
-            while (tempArr[indexFromRight].getRankValue() > pivot) indexFromRight--;
-            if(indexFromLeft <= indexFromRight) swap(tempArr, indexFromLeft++, indexFromRight--);
-            if(first < indexFromRight) quickSort(tempArr, first, indexFromRight);
-            if(indexFromLeft < last) quickSort(tempArr, indexFromLeft, last);
+
+    private Card[] insertionSort(Card[] tempArr){
+        Card nextToInsert;
+        int index;
+
+        for(int i = 1; i<tempArr.length; i++){
+            nextToInsert = tempArr[i];
+            index = i -1;
+            while(index >= 0 && tempArr[index].getRankValue() > nextToInsert.getRankValue()){
+                tempArr[index + 1] = tempArr[index];
+                index--;
+            }
+            tempArr[index + 1] = nextToInsert;
         }
         return tempArr;
     }
 
     public void sort(int handSize){
-        arrToStack(quickSort(toArray(handSize),0, handSize-1));
+        arrToStack(insertionSort(toArray(handSize)));
     }
 
     public void arrToStack(Card[] arr){
