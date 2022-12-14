@@ -61,19 +61,18 @@ public class Streak {
                 maxStreak = calculateStreak();
                 cont = swapCard(hand, deck, swaps, handSize); // if false returned, round ends
                 if(!cont){
-                    if(maxStreak > player.getPlayerScore()) player.setPlayerScore(maxStreak);
                     break;
                 }
                 swaps--;
                 hand.sort(handSize);
                 createReplay();
                 printUI(player);
-                if(maxStreak > player.getPlayerScore()) player.setPlayerScore(maxStreak);
             }
         }catch (EmptyStackException e){
             System.out.println("\nError occurred. Returning to menu.");
             Menu.menu();
         }
+        player.setPlayerScore(maxStreak);
         return  maxStreak;
     }
 
@@ -234,7 +233,6 @@ public class Streak {
         hand.arrToStack(arr);
         return maxStreak;
     }
-
 
     private int chooseHandSize(){
         Hand<Card> HAND = new Hand<>(); //for fetching hand size
