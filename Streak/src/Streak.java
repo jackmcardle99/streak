@@ -108,7 +108,7 @@ public class Streak {
                 count++;
                 System.out.println(playerOne.getPlayerName() + " Round " + count);
                 replay.dequeue().display();
-                System.out.println("\n\n Selection was " + swapReplay.dequeue().toString());
+                System.out.println("\n\nSelection was " + swapReplay.dequeue().toString());
                 System.out.println("\n(Any button to continue...) >");
                 scan.nextLine();
             }

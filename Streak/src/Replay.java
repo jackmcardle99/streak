@@ -47,27 +47,4 @@ public class Replay<T> implements QueueInterface<T> {
         front = null;
         rear = null;
     }
-
-    public static void main(String[] args){
-        Replay<String> replay = new Replay<>();
-
-        replay.enqueue("Milk");
-        replay.enqueue("Eggs");
-        replay.enqueue("Bread");
-
-        for(int i = 1; i <= 4; i++){
-            System.out.println("Get front = " + replay.getFront());
-            System.out.println("Dequeue = " + replay.dequeue());
-        }
-
-        replay.enqueue("Cheese");
-        replay.enqueue("Steak");
-        replay.enqueue("Fish");
-        System.out.println("Queue empty is " + replay.isEmpty());
-        replay.clear();
-        System.out.println("Queue empty is " + replay.isEmpty());
-
-
-    }
-
 }
