@@ -1,6 +1,7 @@
 public class Scoreboard<T extends Comparable<T>> implements QueueInterface<T>{
-
-    // REMOVE EXTENDS COMPARABLE ABOVE
+    /*
+    This class is the implementation of the priority queue structure. It is implemented as a singly linked list.
+     */
     private MyNode<T> front;
 
     private int numberOfEntries = 0;

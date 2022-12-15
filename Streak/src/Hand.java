@@ -1,6 +1,10 @@
 import java.util.EmptyStackException;
 
 public class Hand<T> implements HandInterface<T>{
+    /*
+    This class is an implementation of the hand interface, and is a stack implemented as a singly linked list. It
+    holds upto 10 cards.
+     */
     private static final int MAX_CAPACITY = 10;
     private static final int DEFAULT_CAPACITY = 5;
     private static int numberOfCards = 0;

@@ -1,8 +1,10 @@
 import java.util.EmptyStackException;
 import java.util.Random;
-import java.util.random.*;
-
 public class Deck<T> implements DeckInterface<T>{
+    /*
+    This class is an implementation of the DeckInterface, it is a stack implemented as a singly linked list which
+    allows for storage of card objects.
+     */
     static int numberOfCards = 0;
     int MAX_CAPACITY = 52; //max cards allowed in deck
     MyNode<T> topNode;

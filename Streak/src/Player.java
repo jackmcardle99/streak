@@ -2,6 +2,10 @@ import java.util.Scanner;
 
 public class Player implements Comparable<Player> {
 
+    /*
+    This class is for creating player objects for the game, each player has two attributes, name and score.
+     */
+
     private final String playerName;
     private int playerScore;
 

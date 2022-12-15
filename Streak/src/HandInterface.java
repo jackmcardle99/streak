@@ -1,4 +1,7 @@
 public interface HandInterface<T> {
+    /*
+    This interface details the behaviours than can be used on the hand stack.
+     */
 
     T deal();
     /*

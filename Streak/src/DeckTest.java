@@ -1,5 +1,9 @@
 public class DeckTest {
 
+    /*
+    Test class for behaviour on the deck.
+     */
+
     static Deck<Card> deck = new Deck<>();
 
     public static void main(String[] args){
