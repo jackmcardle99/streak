@@ -19,6 +19,7 @@ public class Menu {
 
     public static void menu(){
         Streak streak = new Streak();
+        Battaile ok = new Battaile();
             while(true){
                 Scanner scan = new Scanner(System.in);
                 System.out.println("""
@@ -32,7 +33,7 @@ public class Menu {
                     """);
                 String userInput = scan.nextLine();
                 switch (userInput) {
-                    case "1" -> streak.play(true); // pass true for singleplayer, false for two player
+                    case "1" -> ok.setUp();  //streak.play(true); // pass true for singleplayer, false for two player
                     case "2" -> streak.play(false);
                     case "3" -> rules();
                     case "4" -> printScoreboard();

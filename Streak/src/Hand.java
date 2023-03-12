@@ -85,6 +85,10 @@ public class Hand<T> implements HandInterface<T>{
 //        return false; // not exactly sure why I need to return false here - line 86 in streak class is the cause
     } // add empty stakc exception
 
+    public boolean isEmpty(){
+        return topNode==null;
+    }
+
     public int getCapacity(){
         return numberOfCards;
     } //returns current size of hand
