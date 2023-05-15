@@ -70,4 +70,8 @@ public class Deck<T> implements DeckInterface<T>{
     public void clear(){
         topNode = null;
     }
+
+    public boolean isEmpty(){
+        return topNode == null;
+    }
    }
